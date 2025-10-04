@@ -62,23 +62,26 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
     if total_recebido_anterior > 0:
         crescimento_mensal = ((total_recebido_atual - total_recebido_anterior) / total_recebido_anterior) * 100
 
-    # Clientes ativos (todos os clientes não deletados até hoje)
-    clientes_ativos = db.query(func.count(Cliente.id))\
+    # Clientes ativos (que têm honorários não vencidos)
+    clientes_ativos = db.query(func.count(func.distinct(Cliente.id)))\
+        .join(Honorario)\
         .filter(
             and_(
                 Cliente.is_deleted == False,
-                Cliente.data_criacao <= hoje
+                Honorario.is_deleted == False,
+                Honorario.data_vencimento >= hoje
             )
         ).scalar() or 0
 
     # Novos clientes este mês
     hoje = date.today()
+    primeiro_dia_mes = hoje.replace(day=1)
     novos_clientes = db.query(func.count(Cliente.id))\
         .filter(
             and_(
                 Cliente.is_deleted == False,
-                extract('year', Cliente.data_criacao) == hoje.year,
-                extract('month', Cliente.data_criacao) == hoje.month
+                Cliente.data_criacao >= primeiro_dia_mes,
+                Cliente.data_criacao <= hoje
             )
         ).scalar() or 0
 
@@ -171,13 +174,15 @@ def get_client_data(db: Session = Depends(get_db)):
         primeiro_dia = data.replace(day=1)
         ultimo_dia = (primeiro_dia + timedelta(days=32)).replace(day=1) - timedelta(days=1)
         
-        # Clientes ativos no mês (clientes que existiam até o final do mês e não foram deletados)
-        ultimo_dia_mes = (data.replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
-        ativos = db.query(func.count(Cliente.id))\
+        # Clientes ativos no mês
+        ativos = db.query(func.count(func.distinct(Cliente.id)))\
+            .join(Honorario)\
             .filter(
                 and_(
                     Cliente.is_deleted == False,
-                    Cliente.data_criacao <= ultimo_dia_mes
+                    Honorario.is_deleted == False,
+                    extract('year', Honorario.data_vencimento) == data.year,
+                    extract('month', Honorario.data_vencimento) == data.month
                 )
             ).scalar() or 0
             
@@ -186,8 +191,8 @@ def get_client_data(db: Session = Depends(get_db)):
             .filter(
                 and_(
                     Cliente.is_deleted == False,
-                    extract('year', Cliente.data_criacao) == data.year,
-                    extract('month', Cliente.data_criacao) == data.month
+                    Cliente.data_criacao >= primeiro_dia,
+                    Cliente.data_criacao <= ultimo_dia
                 )
             ).scalar() or 0
             
