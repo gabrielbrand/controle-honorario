@@ -10,7 +10,6 @@ registerLocale('pt-BR', ptBR);
 export default function ModalHonorario({ isOpen, onClose, honorario = null, onSave }) {
   const [formData, setFormData] = useState({
     cliente_id: '',
-    contador_id: '',
     valor: '',
     data_vencimento: null,
     mes_referencia: new Date(),
@@ -18,9 +17,7 @@ export default function ModalHonorario({ isOpen, onClose, honorario = null, onSa
   });
 
   const [clientes, setClientes] = useState([]);
-  const [contadores, setContadores] = useState([]);
   const [isLoadingClientes, setIsLoadingClientes] = useState(false);
-  const [isLoadingContadores, setIsLoadingContadores] = useState(false);
 
   // Função para formatar valor como moeda brasileira
   const formatarMoeda = (valor) => {
@@ -73,17 +70,15 @@ export default function ModalHonorario({ isOpen, onClose, honorario = null, onSa
     setFormData({ ...formData, valor: valorFormatado });
   };
 
-  // Buscar clientes e contadores quando o modal abrir
+  // Buscar clientes quando o modal abrir
   useEffect(() => {
     if (isOpen) {
       fetchClientes();
-      fetchContadores();
       
       // Se não há honorário selecionado (novo honorário), limpa os campos
         if (!honorario) {
         setFormData({
           cliente_id: '',
-          contador_id: '',
           valor: '',
           data_vencimento: null,
           mes_referencia: new Date(),
@@ -110,7 +105,6 @@ export default function ModalHonorario({ isOpen, onClose, honorario = null, onSa
 
       setFormData({
         cliente_id: honorario.cliente?.id || '',
-        contador_id: honorario.contador?.id || '',
         valor: honorario.valor ? formatarMoeda((honorario.valor * 100).toString()) : '',
         data_vencimento: honorario.dataVencimento ? new Date(honorario.dataVencimento) : null,
         mes_referencia: mesReferenciaDate,
@@ -136,22 +130,6 @@ export default function ModalHonorario({ isOpen, onClose, honorario = null, onSa
     }
   };
 
-  const fetchContadores = async () => {
-    try {
-      setIsLoadingContadores(true);
-      const response = await fetch('http://localhost:8000/contadores/');
-      if (response.ok) {
-        const data = await response.json();
-        setContadores(data);
-      } else {
-        console.error('Erro ao buscar contadores');
-      }
-    } catch (error) {
-      console.error('Erro ao buscar contadores:', error);
-    } finally {
-      setIsLoadingContadores(false);
-    }
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -199,50 +177,26 @@ export default function ModalHonorario({ isOpen, onClose, honorario = null, onSa
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">
-                Cliente
-              </label>
-              <select
-                value={formData.cliente_id}
-                onChange={(e) => setFormData({ ...formData, cliente_id: e.target.value })}
-                className="w-full p-2.5 border rounded-md focus:ring-2 border-gray-300 text-black focus:ring-blue-500 focus:border-blue-500 font-inter"
-                required
-                disabled={isLoadingClientes}
-              >
-                <option value="" className="text-gray-400">
-                  {isLoadingClientes ? 'Carregando clientes...' : 'Selecione um cliente'}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">
+              Cliente
+            </label>
+            <select
+              value={formData.cliente_id}
+              onChange={(e) => setFormData({ ...formData, cliente_id: e.target.value })}
+              className="w-full p-2.5 border rounded-md focus:ring-2 border-gray-300 text-black focus:ring-blue-500 focus:border-blue-500 font-inter"
+              required
+              disabled={isLoadingClientes}
+            >
+              <option value="" className="text-gray-400">
+                {isLoadingClientes ? 'Carregando clientes...' : 'Selecione um cliente'}
+              </option>
+              {clientes.map((cliente) => (
+                <option key={cliente.id} value={cliente.id} className="text-black">
+                  {cliente.nome}
                 </option>
-                {clientes.map((cliente) => (
-                  <option key={cliente.id} value={cliente.id} className="text-black">
-                    {cliente.nome}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">
-                Contador
-              </label>
-              <select
-                value={formData.contador_id}
-                onChange={(e) => setFormData({ ...formData, contador_id: e.target.value })}
-                className="w-full p-2.5 border rounded-md focus:ring-2 border-gray-300 text-black focus:ring-blue-500 focus:border-blue-500 font-inter"
-                required
-                disabled={isLoadingContadores}
-              >
-                <option value="" className="text-gray-400">
-                  {isLoadingContadores ? 'Carregando contadores...' : 'Selecione um contador'}
-                </option>
-                {contadores.map((contador) => (
-                  <option key={contador.id} value={contador.id} className="text-black">
-                    {contador.nome}
-                  </option>
-                ))}
-              </select>
-            </div>
+              ))}
+            </select>
           </div>
 
           <div>

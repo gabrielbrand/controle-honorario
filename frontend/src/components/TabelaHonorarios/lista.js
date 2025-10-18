@@ -7,14 +7,6 @@ export async function buscarCliente(clienteId) {
   return await response.json();
 }
 
-export async function buscarContador(contadorId) {
-  const response = await fetch(`http://localhost:8000/contadores/${contadorId}`);
-  if (!response.ok) {
-    console.error('Erro ao buscar contador:', contadorId);
-    return null;
-  }
-  return await response.json();
-}
 
 export async function buscarStatus(statusId) {
   const response = await fetch(`http://localhost:8000/status/${statusId}`);
@@ -42,12 +34,11 @@ export async function buscarHonorarios() {
     }
     const data = await response.json();
     
-    // Buscar dados dos clientes, contadores e status para cada honorário
+    // Buscar dados dos clientes e status para cada honorário
     const honorariosCompletos = await Promise.all(
       data.map(async (honorario) => {
-        const [cliente, contador, status] = await Promise.all([
+        const [cliente, status] = await Promise.all([
           buscarCliente(honorario.cliente_id),
-          buscarContador(honorario.contador_id),
           buscarStatus(honorario.status_id)
         ]);
 
@@ -68,11 +59,6 @@ export async function buscarHonorarios() {
           mes_referencia: mesReferencia,
           cliente: cliente || {
             nome: 'Cliente não informado',
-            email: 'Email não informado',
-            telefone: 'Telefone não informado'
-          },
-          contador: contador || {
-            nome: 'Contador não informado',
             email: 'Email não informado',
             telefone: 'Telefone não informado'
           },

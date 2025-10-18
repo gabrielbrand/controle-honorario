@@ -8,7 +8,6 @@ from app.schemas.status import Status
 class HonorarioBase(BaseModel):
     valor: float = Field(..., gt=0, description="Valor do honorário")
     cliente_id: int
-    contador_id: int
     data_vencimento: date
     mes_referencia: str = Field(
         default_factory=lambda: datetime.now().strftime("%Y-%m"),
@@ -74,8 +73,11 @@ class Honorario(HonorarioBase):
     id: int
     data_criacao: date
     status_id: int
+    notificado: bool = False
+    notificado1a: bool = False
+    notificado3: bool = False
     cliente: Optional[Cliente]
     status: Optional[Status]
 
     class Config:
-        orm_mode = True
+        from_attributes = True

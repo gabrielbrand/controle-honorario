@@ -6,7 +6,6 @@ import {
   Home, 
   DollarSign, 
   UserPlus, 
-  UserCog,
   CreditCard,
   LogOut 
 } from 'lucide-react';
@@ -76,13 +75,6 @@ export default function Header() {
               Clientes
             </li>
             
-            <li 
-              className="cursor-pointer hover:bg-gray-100 p-2 rounded transition-colors text-normal text-black flex items-center gap-2 select-none"
-              onClick={() => router.push('/contadores')}
-            >
-              <UserCog size={20} /> 
-              Contadores
-            </li>
             
             <li className="cursor-pointer hover:bg-gray-100 p-2 rounded transition-colors text-normal text-red-500 flex items-center gap-2 mt-auto select-none">
               <LogOut size={20} className="text-red-500" /> 

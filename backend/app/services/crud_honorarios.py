@@ -11,21 +11,17 @@ def get_honorarios(
     skip: int = 0,
     limit: int = 100,
     cliente_id: int | None = None,
-    contador_id: int | None = None,
     status_id: int | None = None
 ) -> List[Honorario]:
     query = db.query(Honorario).join(
         Honorario.cliente
     ).options(
         joinedload(Honorario.cliente),
-        joinedload(Honorario.contador),
         joinedload(Honorario.status)
     ).filter(Honorario.is_deleted == False)  # Filtrar apenas não deletados
     
     if cliente_id:
         query = query.filter(Honorario.cliente_id == cliente_id)
-    if contador_id:
-        query = query.filter(Honorario.contador_id == contador_id)
     if status_id:
         query = query.filter(Honorario.status_id == status_id)
         
@@ -46,7 +42,6 @@ def get_honorario(db: Session, honorario_id: int) -> Honorario:
         Honorario.cliente
     ).options(
         joinedload(Honorario.cliente),
-        joinedload(Honorario.contador),
         joinedload(Honorario.status)
     ).filter(
         Honorario.id == honorario_id,

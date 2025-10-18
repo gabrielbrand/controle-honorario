@@ -274,7 +274,6 @@ function ListaHonorarios() {
       // Preparar dados para envio
       const honorarioData = {
         cliente_id: parseInt(formData.cliente_id),
-        contador_id: parseInt(formData.contador_id),
         valor: parseFloat(formData.valor),
         data_vencimento: formData.data_vencimento.toISOString().split('T')[0],
         mes_referencia: formData.mes_referencia,

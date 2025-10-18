@@ -16,7 +16,6 @@ def listar_honorarios(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=100),
     cliente_id: int | None = None,
-    contador_id: int | None = None,
     status_id: int | None = None,
     db: Session = Depends(get_db)
 ):
@@ -28,7 +27,6 @@ def listar_honorarios(
         skip=skip,
         limit=limit,
         cliente_id=cliente_id,
-        contador_id=contador_id,
         status_id=status_id
     )
 
