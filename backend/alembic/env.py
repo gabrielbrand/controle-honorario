@@ -1,14 +1,9 @@
 from logging.config import fileConfig
-import os
-from dotenv import load_dotenv
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-
-# Load environment variables
-load_dotenv()
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -21,13 +16,9 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-
-from app.database import Base
-from app.models import clientes, contadores, honorarios, pagamentos, status, tipo_pagamento
-
-target_metadata = Base.metadata
+# from myapp import mymodel
+# target_metadata = mymodel.Base.metadata
+target_metadata = None
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -47,8 +38,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    # Get database URL from environment variable
-    url = os.getenv("DATABASE_URL") or config.get_main_option("sqlalchemy.url")
+    url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -67,11 +57,6 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    # Get database URL from environment variable
-    database_url = os.getenv("DATABASE_URL")
-    if database_url:
-        config.set_main_option("sqlalchemy.url", database_url)
-    
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",

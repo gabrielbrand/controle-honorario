@@ -29,7 +29,3 @@ app.include_router(dashboard.router)
 @app.get("/")
 def read_root():
     return {"message": "Bem-vindo à API de Controle de Honorários"}
-
-@app.get("/health")
-def health_check():
-    return {"status": "healthy", "message": "API is running"}
