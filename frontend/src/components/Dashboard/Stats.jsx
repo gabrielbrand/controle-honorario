@@ -29,26 +29,11 @@ export default function Stats({ stats }) {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-gray-500 font-medium">Clientes Ativos</p>
-            <p className="text-2xl font-bold text-blue-600">{stats.clientesAtivos || 0}</p>
+            <p className="text-sm text-gray-500 font-medium">Honorários Pendentes</p>
+            <p className="text-2xl font-bold text-[#343A40]">{formatCurrency(stats.honorariosPendentes || 0)}</p>
           </div>
           <div className="bg-blue-100 p-3 rounded-full">
-            <Users className="h-6 w-6 text-blue-600" />
-          </div>
-        </div>
-        <p className="text-xs text-gray-500 mt-2">
-          {stats.novosClientes || 0} novos este mês
-        </p>
-      </div>
-
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-500 font-medium">Honorários Pendentes</p>
-            <p className="text-2xl font-bold text-yellow-600">{formatCurrency(stats.honorariosPendentes || 0)}</p>
-          </div>
-          <div className="bg-yellow-100 p-3 rounded-full">
-            <Clock className="h-6 w-6 text-yellow-600" />
+            <Clock className="h-6 w-6 text-blue-600" />
           </div>
         </div>
         <p className="text-xs text-gray-500 mt-2">
@@ -59,15 +44,30 @@ export default function Stats({ stats }) {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-gray-500 font-medium">Taxa de Crescimento</p>
-            <p className="text-2xl font-bold text-purple-600">{stats.taxaCrescimento || 0}%</p>
+            <p className="text-sm text-gray-500 font-medium">Honorários Cadastrados</p>
+            <p className="text-2xl font-bold text-[#343A40]">{stats.honorariosCadastrados || 0}</p>
           </div>
-          <div className="bg-purple-100 p-3 rounded-full">
-            <TrendingUp className="h-6 w-6 text-purple-600" />
+          <div className="bg-blue-100 p-3 rounded-full">
+            <TrendingUp className="h-6 w-6 text-blue-600" />
           </div>
         </div>
         <p className="text-xs text-gray-500 mt-2">
-          Crescimento anual
+          Total de honorários no sistema
+        </p>
+      </div>
+
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm text-gray-500 font-medium">Clientes Ativos</p>
+            <p className="text-2xl font-bold text-[#343A40]">{stats.clientesAtivos || 0}</p>
+          </div>
+          <div className="bg-blue-100 p-3 rounded-full">
+            <Users className="h-6 w-6 text-blue-600" />
+          </div>
+        </div>
+        <p className="text-xs text-gray-500 mt-2">
+          {stats.novosClientes || 0} novos este mês
         </p>
       </div>
     </div>

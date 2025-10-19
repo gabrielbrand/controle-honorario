@@ -69,13 +69,13 @@ function App() {
           <div className="space-x-4">
             <Link 
               href="/clientes" 
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#021edf] hover:bg-blue-700"
             >
               Consultar Clientes
             </Link>
             <Link 
               href="/honorarios" 
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#021edf] hover:bg-blue-700"
             >
               Consultar Honorários
             </Link>

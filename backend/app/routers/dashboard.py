@@ -17,7 +17,7 @@ class DashboardStats(BaseModel):
     novosClientes: int
     honorariosPendentes: float
     qtdHonorariosPendentes: int
-    taxaCrescimento: float
+    honorariosCadastrados: int
 
 class RevenueData(BaseModel):
     month: str
@@ -108,26 +108,10 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
             )
         ).scalar() or 0
 
-    # Taxa de crescimento anual
-    total_ano_atual = db.query(func.sum(Pagamento.valor))\
-        .filter(
-            and_(
-                Pagamento.is_deleted == False,
-                extract('year', Pagamento.data_pagamento) == hoje.year
-            )
-        ).scalar() or 0
-
-    total_ano_anterior = db.query(func.sum(Pagamento.valor))\
-        .filter(
-            and_(
-                Pagamento.is_deleted == False,
-                extract('year', Pagamento.data_pagamento) == hoje.year - 1
-            )
-        ).scalar() or 0
-
-    taxa_crescimento = 0
-    if total_ano_anterior > 0:
-        taxa_crescimento = ((total_ano_atual - total_ano_anterior) / total_ano_anterior) * 100
+    # Total de honorários cadastrados
+    honorarios_cadastrados = db.query(func.count(Honorario.id))\
+        .filter(Honorario.is_deleted == False)\
+        .scalar() or 0
 
     return DashboardStats(
         totalRecebido=total_recebido_atual,
@@ -136,7 +120,7 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
         novosClientes=novos_clientes,
         honorariosPendentes=honorarios_pendentes,
         qtdHonorariosPendentes=qtd_honorarios_pendentes,
-        taxaCrescimento=round(taxa_crescimento, 2)
+        honorariosCadastrados=honorarios_cadastrados
     )
 
 @router.get("/dashboard/revenue", response_model=List[RevenueData])

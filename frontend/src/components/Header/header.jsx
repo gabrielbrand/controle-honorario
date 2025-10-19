@@ -20,19 +20,12 @@ export default function Header() {
 
   return (
     <>
-      <div className="w-full h-15 bg-blue-500 flex flex-row items-center justify-start gap-2 relative z-20">
+      <div className="w-full h-15 bg-white shadow-sm flex flex-row items-center justify-start gap-2 relative z-20">
         <AlignJustify 
-          className="text-white ml-5 cursor-pointer" 
+          className="text-black ml-5 cursor-pointer" 
           onClick={toggleMenu}
         />
-        <Image 
-          src="/logo.svg" 
-          alt="Logo" 
-          width={50} 
-          height={50}
-          className="ml-10 select-none"
-        />
-        <div className="text-white text-2xl font-bold font-inter select-none">Controle de Honorários</div>
+        <div className="text-black text-2xl font-bold font-inter select-none ml-10">Controle de Honorários</div>
       </div>
       
       {/* Overlay escuro */}

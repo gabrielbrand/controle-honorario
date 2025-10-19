@@ -91,8 +91,8 @@ export default function Charts({ revenueData, clientData }) {
             >
               <defs>
                 <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="#021edf" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#021edf" stopOpacity={0}/>
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" />
@@ -153,7 +153,7 @@ export default function Charts({ revenueData, clientData }) {
               <Bar 
                 name="Novos Clientes" 
                 dataKey="new" 
-                fill="#6366F1"
+                fill="#021edf"
               />
             </BarChart>
           </ResponsiveContainer>
