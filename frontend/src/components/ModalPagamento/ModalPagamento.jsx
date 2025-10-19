@@ -124,7 +124,7 @@ function ModalPagamento({ isOpen, onClose, pagamento, onSave }) {
           <X size={24} />
         </button>
 
-        <h2 className="text-2xl font-bold text-blue-600 font-inter mb-8">
+        <h2 className="text-2xl font-bold text-gray-800 font-inter mb-8">
           {pagamento ? 'Editar Pagamento' : 'Novo Pagamento'}
         </h2>
 
@@ -241,14 +241,14 @@ function ModalPagamento({ isOpen, onClose, pagamento, onSave }) {
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="px-6 py-2.5 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 font-inter cursor-pointer disabled:opacity-50"
+              className="px-6 py-2.5 text-[#021edf] border border-[#021edf] rounded-md hover:bg-blue-50 font-inter cursor-pointer disabled:opacity-50"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2.5 text-white bg-blue-600 rounded-md hover:bg-blue-500 font-inter cursor-pointer disabled:opacity-50"
+              className="px-6 py-2.5 text-white bg-[#021edf] rounded-md hover:bg-blue-500 font-inter cursor-pointer disabled:opacity-50"
             >
               {isSubmitting ? 'Salvando...' : pagamento ? 'Salvar' : 'Cadastrar'}
             </button>

@@ -22,10 +22,10 @@ export default function Header() {
     <>
       <div className="w-full h-15 bg-white shadow-sm flex flex-row items-center justify-start gap-2 relative z-20">
         <AlignJustify 
-          className="text-black ml-5 cursor-pointer" 
+          className="text-gray-800 ml-5 cursor-pointer" 
           onClick={toggleMenu}
         />
-        <div className="text-black text-2xl font-bold font-inter select-none ml-10">Controle de Honorários</div>
+        <div className="text-gray-800 text-2xl font-bold font-inter select-none ml-10">Controle de Honorários</div>
       </div>
       
       {/* Overlay escuro */}
@@ -66,12 +66,6 @@ export default function Header() {
             >
               <UserPlus size={20} /> 
               Clientes
-            </li>
-            
-            
-            <li className="cursor-pointer hover:bg-gray-100 p-2 rounded transition-colors text-normal text-red-500 flex items-center gap-2 mt-auto select-none">
-              <LogOut size={20} className="text-red-500" /> 
-              Sair
             </li>
           </ul>
         </div>

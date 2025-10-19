@@ -338,7 +338,7 @@ function ListaClientes({ triggerReload }) {
               setSelectedCliente(null);
               setIsModalOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-inter cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 bg-[#021edf] text-white rounded-lg hover:bg-blue-600 transition-colors font-inter cursor-pointer"
           >
             <Plus size={20} />
             Novo Cliente
@@ -377,12 +377,12 @@ function ListaClientes({ triggerReload }) {
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
           {/* Header */}
-          <div className="bg-blue-500 px-6 py-4">
+          <div className="bg-[#F1F3F6] px-6 py-4">
             <div className="grid grid-cols-4 gap-4">
-              <div className="text-sm font-inter text-white uppercase tracking-wider">Nome</div>
-              <div className="text-sm font-inter text-white uppercase tracking-wider">Email</div>
-              <div className="text-sm font-inter text-white uppercase tracking-wider">Telefone</div>
-              <div className="text-sm font-inter text-white uppercase tracking-wider text-center">Ações</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider">Nome</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider">Email</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider">Telefone</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider text-center">Ações</div>
             </div>
           </div>
 
@@ -394,7 +394,7 @@ function ListaClientes({ triggerReload }) {
                   <div className="text-gray-500 font-inter text-base text-center">
                     <div className="mb-2">Você ainda não possui clientes cadastrados</div>
                     <div>
-                      Clique em <span className="text-blue-600 font-semibold">"Novo Cliente"</span> para começar!
+                      Clique em <span className="text-[#021edf] font-semibold">"Novo Cliente"</span> para começar!
                     </div>
                   </div>
                 ) : (
@@ -413,13 +413,13 @@ function ListaClientes({ triggerReload }) {
                   } hover:bg-gray-100 transition-colors`}
                 >
                   <div className="text-sm font-inter text-gray-900 flex flex-col justify-center">
-                    <div className="font-semibold font-inter">{cliente.nome}</div>
+                    <div className="font-regular font-inter">{cliente.nome}</div>
                   </div>
                   <div className="text-sm font-inter text-gray-900 flex flex-col justify-center">
-                    <div className="font-semibold font-inter">{cliente.email}</div>
+                    <div className="font-regular font-inter">{cliente.email}</div>
                   </div>
                   <div className="text-sm font-inter text-gray-900 flex flex-col justify-center">
-                    <div className="font-semibold font-inter">{formatarTelefone(cliente.telefone)}</div>
+                    <div className="font-regular font-inter">{formatarTelefone(cliente.telefone)}</div>
                   </div>
                   <div className="flex items-center justify-center gap-3">
                     <button 
@@ -478,7 +478,7 @@ function ListaClientes({ triggerReload }) {
                 onClick={() => handlePageChange(index + 1)}
                 className={`px-4 py-2 border rounded-md text-sm font-inter cursor-pointer ${
                   currentPage === index + 1
-                    ? 'bg-blue-500 text-white border-blue-500'
+                    ? 'bg-[#021edf] text-white border-[#021edf]'
                     : 'bg-white text-gray-700 hover:bg-gray-50'
                 }`}
               >

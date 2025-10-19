@@ -510,7 +510,7 @@ function ListaHonorarios() {
               setSelectedHonorario(null);
               setIsModalOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-inter cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 bg-[#021edf] text-white rounded-lg hover:bg-blue-600 transition-colors font-inter cursor-pointer"
           >
             <Plus size={20} />
             Novo Honorário
@@ -630,14 +630,14 @@ function ListaHonorarios() {
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
           {/* Header */}
-          <div className="bg-blue-500 px-6 py-4">
+          <div className="bg-[#F1F3F6] px-6 py-4">
             <div className="grid grid-cols-6 gap-4">
-              <div className="text-sm font-inter text-white uppercase tracking-wider text-center">Cliente</div>
-              <div className="text-sm font-inter text-white uppercase tracking-wider text-right">Valor</div>
-              <div className="text-sm font-inter text-white uppercase tracking-wider text-center">Mês Ref.</div>
-              <div className="text-sm font-inter text-white uppercase tracking-wider text-center">Data Vencimento</div>
-              <div className="text-sm font-inter text-white uppercase tracking-wider text-center">Status</div>
-              <div className="text-sm font-inter text-white uppercase tracking-wider text-center">Ações</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider text-center">Cliente</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider text-right">Valor</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider text-center">Mês Ref.</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider text-center">Data Vencimento</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider text-center">Status</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider text-center">Ações</div>
             </div>
           </div>
 
@@ -684,10 +684,10 @@ function ListaHonorarios() {
                     } hover:bg-gray-100 transition-colors`}
                   >
                     <div className="text-sm font-inter text-gray-900 flex flex-col justify-center">
-                      <div className="font-semibold font-inter">{honorario.cliente?.nome}</div>
+                      <div className="font-regular font-inter">{honorario.cliente?.nome}</div>
                     </div>
                     <div className="text-sm font-inter text-gray-900 flex flex-col justify-center">
-                      <div className="font-semibold font-inter text-right">
+                      <div className="font-regular font-inter text-right">
                         {new Intl.NumberFormat('pt-BR', {
                           style: 'currency',
                           currency: 'BRL'
@@ -695,17 +695,17 @@ function ListaHonorarios() {
                       </div>
                     </div>
                     <div className="text-sm font-inter text-gray-900 flex flex-col justify-center">
-                      <div className="font-semibold font-inter text-center">
+                      <div className="font-regular font-inter text-center">
                         {formatarMesReferencia(honorario.mes_referencia)}
                       </div>
                     </div>
                     <div className="text-sm font-inter text-gray-900 flex flex-col justify-center">
-                      <div className="font-semibold font-inter text-center">
+                      <div className="font-regular font-inter text-center">
                         {formatarData(honorario.dataVencimento)}
                         {statusAtual?.nome !== 'PAGO' && honorario.dataVencimento && (
                           <div className={`text-xs font-inter text-center ${
-                            diasAteVencimento < 0 ? 'text-red-500' : 
-                            diasAteVencimento <= 3 ? 'text-yellow-500' : 'text-gray-500'
+                            diasAteVencimento < 0 ? 'text-gray-500' : 
+                            diasAteVencimento <= 3 ? 'text-gray-500' : 'text-gray-500'
                           }`}>
                             {diasAteVencimento < 0 
                               ? `Atrasado há ${Math.abs(diasAteVencimento)} dias`
@@ -780,7 +780,7 @@ function ListaHonorarios() {
                 onClick={() => handlePageChange(index + 1)}
                 className={`px-4 py-2 border rounded-md text-sm font-inter cursor-pointer ${
                   currentPage === index + 1
-                    ? 'bg-blue-500 text-white border-blue-500'
+                    ? 'bg-[#021edf] text-white border-[#021edf]'
                     : 'bg-white text-gray-700 hover:bg-gray-50'
                 }`}
               >

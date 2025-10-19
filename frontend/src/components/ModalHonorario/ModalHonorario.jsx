@@ -172,7 +172,7 @@ export default function ModalHonorario({ isOpen, onClose, honorario = null, onSa
           <X size={24} />
         </button>
 
-        <h2 className="text-2xl font-bold text-blue-600 font-inter mb-8">
+        <h2 className="text-2xl font-bold text-gray-800 font-inter mb-8">
           {honorario ? 'Editar Honorário' : 'Novo Honorário'}
         </h2>
 
@@ -273,13 +273,13 @@ export default function ModalHonorario({ isOpen, onClose, honorario = null, onSa
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2.5 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 font-inter cursor-pointer"
+              className="px-6 py-2.5 text-[#021edf] border border-[#021edf] rounded-md hover:bg-blue-50 font-inter cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 text-white bg-blue-600 rounded-md hover:bg-blue-500 font-inter cursor-pointer"
+              className="px-6 py-2.5 text-white bg-[#021edf] rounded-md hover:bg-blue-500 font-inter cursor-pointer"
             >
               {honorario ? 'Salvar' : 'Cadastrar'}
             </button>

@@ -315,7 +315,7 @@ function ListaPagamentos() {
               setSelectedPagamento(null);
               setIsModalOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-inter cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 bg-[#021edf] text-white rounded-lg hover:bg-blue-600 transition-colors font-inter cursor-pointer"
           >
             <Plus size={20} />
             Novo Pagamento
@@ -434,13 +434,13 @@ function ListaPagamentos() {
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
           {/* Header */}
-          <div className="bg-blue-500 px-6 py-4">
+          <div className="bg-[#F1F3F6] px-6 py-4">
             <div className="grid grid-cols-5 gap-4">
-              <div className="text-sm font-inter text-white uppercase tracking-wider">Cliente/Referência</div>
-              <div className="text-sm font-inter text-white uppercase tracking-wider text-center">Valor</div>
-              <div className="text-sm font-inter text-white uppercase tracking-wider text-center">Tipo Pagamento</div>
-              <div className="text-sm font-inter text-white uppercase tracking-wider text-center">Data Pagamento</div>
-              <div className="text-sm font-inter text-white uppercase tracking-wider text-center">Ações</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider">Cliente/Referência</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider text-center">Valor</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider text-center">Tipo Pagamento</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider text-center">Data Pagamento</div>
+              <div className="text-sm font-semibold text-[#0B174C] tracking-wider text-center">Ações</div>
             </div>
           </div>
 
@@ -452,7 +452,7 @@ function ListaPagamentos() {
                   <div className="text-gray-500 font-inter text-base text-center">
                     <div className="mb-2">Você ainda não possui pagamentos cadastrados</div>
                     <div>
-                      Clique em <span className="text-blue-600 font-semibold">"Novo Pagamento"</span> para começar!
+                      Clique em <span className="text-[#021edf] font-semibold">"Novo Pagamento"</span> para começar!
                     </div>
                   </div>
                 ) : (
@@ -479,7 +479,7 @@ function ListaPagamentos() {
                   >
                     {/* Cliente e Referência */}
                     <div className="flex flex-col justify-center">
-                      <span className="text-sm font-semibold text-gray-900 truncate">
+                      <span className="text-sm font-regular text-gray-900 truncate">
                         {pagamento.honorario?.cliente?.nome || 'Cliente não encontrado'}
                       </span>
                       <span className="text-xs text-gray-500">
@@ -489,7 +489,7 @@ function ListaPagamentos() {
 
                     {/* Valor */}
                     <div className="flex justify-center items-center">
-                      <span className="text-sm font-semibold text-gray-900">
+                      <span className="text-sm font-regular text-gray-900">
                         {formatarValor(pagamento.valor)}
                       </span>
                     </div>
@@ -503,7 +503,7 @@ function ListaPagamentos() {
 
                     {/* Data */}
                     <div className="flex justify-center items-center">
-                      <span className="text-sm font-semibold text-gray-900">
+                      <span className="text-sm font-regular text-gray-900">
                         {formatarData(pagamento.data_pagamento)}
                       </span>
                     </div>
@@ -569,7 +569,7 @@ function ListaPagamentos() {
                 onClick={() => handlePageChange(index + 1)}
                 className={`px-4 py-2 border rounded-md text-sm font-inter cursor-pointer ${
                   currentPage === index + 1
-                    ? 'bg-blue-500 text-white border-blue-500'
+                    ? 'bg-[#021edf] text-white border-[#021edf]'
                     : 'bg-white text-gray-700 hover:bg-gray-50'
                 }`}
               >
