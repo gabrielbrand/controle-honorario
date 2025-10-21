@@ -18,7 +18,7 @@ def get_honorarios(
     ).options(
         joinedload(Honorario.cliente),
         joinedload(Honorario.status)
-    ).filter(Honorario.is_deleted == False)  # Filtrar apenas não deletados
+    ).filter(Honorario.is_deleted == False)
     
     if cliente_id:
         query = query.filter(Honorario.cliente_id == cliente_id)
@@ -27,10 +27,8 @@ def get_honorarios(
         
     honorarios = query.offset(skip).limit(limit).all()
     
-    # Garantir que mes_referencia nunca seja None
     for honorario in honorarios:
         if honorario.mes_referencia is None:
-            # Se não houver mês de referência, usar o mês atual
             hoje = datetime.now()
             honorario.mes_referencia = f"{hoje.year}-{str(hoje.month).zfill(2)}"
             db.commit()
@@ -53,14 +51,11 @@ def get_honorario(db: Session, honorario_id: int) -> Honorario:
     return honorario
 
 def create_honorario(db: Session, honorario: HonorarioCreate) -> Honorario:
-    # Preparar dados com valores padrão
     honorario_data = honorario.dict()
     
-    # Definir valor padrão para status se não fornecido
     if 'status_id' not in honorario_data or honorario_data['status_id'] is None:
-        honorario_data['status_id'] = 1  # PENDENTE
+        honorario_data['status_id'] = 1
     
-    # Garantir que mes_referencia não seja None
     if 'mes_referencia' not in honorario_data or honorario_data['mes_referencia'] is None:
         hoje = datetime.now()
         honorario_data['mes_referencia'] = f"{hoje.year}-{str(hoje.month).zfill(2)}"
@@ -85,7 +80,6 @@ def update_honorario(
     
     update_data = honorario_update.dict(exclude_unset=True)
     
-    # Garantir que mes_referencia não seja None se estiver sendo atualizado
     if 'mes_referencia' in update_data and update_data['mes_referencia'] is None:
         hoje = datetime.now()
         update_data['mes_referencia'] = f"{hoje.year}-{str(hoje.month).zfill(2)}"
@@ -105,7 +99,6 @@ def delete_honorario(db: Session, honorario_id: int) -> bool:
     db_honorario = get_honorario(db, honorario_id)
     
     try:
-        # Soft delete
         db_honorario.is_deleted = True
         db.commit()
         return True
@@ -138,17 +131,16 @@ def check_overdue_honorarios(db: Session) -> None:
     
     hoje = date.today()
     
-    # Buscar honorários pendentes que passaram da data de vencimento
     overdue_honorarios = db.query(Honorario).filter(
         and_(
-            Honorario.status_id == 1,  # PENDENTE
+            Honorario.status_id == 1,
             Honorario.data_vencimento < hoje
         )
     ).all()
     
     count = 0
     for honorario in overdue_honorarios:
-        honorario.status_id = 3  # ATRASADO
+        honorario.status_id = 3
         count += 1
     
     if count > 0:

@@ -2,7 +2,6 @@ from pydantic import BaseModel
 
 class TipoPagamentoBase(BaseModel):
     nome: str
-    descricao: str | None = None
 
 class TipoPagamentoCreate(TipoPagamentoBase):
     pass

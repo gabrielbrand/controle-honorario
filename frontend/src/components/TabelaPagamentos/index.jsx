@@ -512,7 +512,7 @@ function ListaPagamentos() {
                     <div className="flex items-center justify-center gap-2">
                       <button 
                         onClick={() => handleEdit(pagamento)}
-                        className="p-1.5 rounded-full hover:bg-blue-50 transition-colors"
+                        className="p-1.5 rounded-full hover:bg-blue-50 transition-colors cursor-pointer"
                       >
                         <Image 
                           src="/edicao-icon.svg" 
@@ -524,7 +524,7 @@ function ListaPagamentos() {
                       </button>
                       <button 
                         onClick={() => handleDeleteClick(pagamento)}
-                        className="p-1.5 rounded-full hover:bg-red-50 transition-colors"
+                        className="p-1.5 rounded-full hover:bg-blue-50 transition-colors cursor-pointer"
                       >
                         <Image 
                           src="/deletar-icon.svg" 

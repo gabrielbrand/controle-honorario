@@ -26,11 +26,9 @@ def create_status(db: Session, status: StatusCreate):
         db.rollback()
         raise HTTPException(status_code=400, detail=str(e))
 
-def update_status(db: Session, status_id: int, nome: str, descricao: str | None = None):
+def update_status(db: Session, status_id: int, nome: str | None = None):
     db_status = get_status_by_id(db, status_id)
     db_status.nome = nome
-    if descricao is not None:
-        db_status.descricao = descricao
     
     try:
         db.commit()

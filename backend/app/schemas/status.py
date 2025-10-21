@@ -2,7 +2,6 @@ from pydantic import BaseModel
 
 class StatusBase(BaseModel):
     nome: str
-    descricao: str | None = None
 
 class StatusCreate(StatusBase):
     pass

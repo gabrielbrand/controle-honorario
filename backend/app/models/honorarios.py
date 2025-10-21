@@ -13,7 +13,6 @@ class Honorario(Base):
     cliente_id = Column(Integer, ForeignKey("clientes.id"))
     valor = Column(Float, nullable=False)
     status_id = Column(Integer, ForeignKey("status.id"))
-    data_criacao = Column(Date, default=date.today)
     data_vencimento = Column(Date, nullable=False)
     mes_referencia = Column(String(7), nullable=False)
     descricao = Column(String, nullable=True)

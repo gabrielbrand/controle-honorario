@@ -30,14 +30,11 @@ class ClientData(BaseModel):
 
 @router.get("/dashboard/stats", response_model=DashboardStats)
 def get_dashboard_stats(db: Session = Depends(get_db)):
-    # Data atual e primeiro dia do mês atual
     hoje = datetime.now()
     primeiro_dia_mes_atual = hoje.replace(day=1)
     
-    # Mês anterior
     primeiro_dia_mes_anterior = (hoje.replace(day=1) - timedelta(days=1)).replace(day=1)
     
-    # Total recebido no mês atual
     total_recebido_atual = db.query(func.sum(Pagamento.valor))\
         .filter(
             and_(
@@ -47,7 +44,6 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
             )
         ).scalar() or 0
 
-    # Total recebido no mês anterior
     total_recebido_anterior = db.query(func.sum(Pagamento.valor))\
         .filter(
             and_(
@@ -57,12 +53,10 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
             )
         ).scalar() or 0
 
-    # Calcular crescimento mensal
     crescimento_mensal = 0
     if total_recebido_anterior > 0:
         crescimento_mensal = ((total_recebido_atual - total_recebido_anterior) / total_recebido_anterior) * 100
 
-    # Clientes ativos (que têm honorários não vencidos)
     clientes_ativos = db.query(func.count(func.distinct(Cliente.id)))\
         .join(Honorario)\
         .filter(
@@ -73,7 +67,6 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
             )
         ).scalar() or 0
 
-    # Novos clientes este mês
     hoje = date.today()
     primeiro_dia_mes = hoje.replace(day=1)
     novos_clientes = db.query(func.count(Cliente.id))\
@@ -85,14 +78,13 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
             )
         ).scalar() or 0
 
-    # Honorários pendentes (soma de PENDENTE e ATRASADO)
     honorarios_pendentes = db.query(func.sum(Honorario.valor))\
         .filter(
             and_(
                 Honorario.is_deleted == False,
                 or_(
-                    Honorario.status_id == 1,  # PENDENTE
-                    Honorario.status_id == 3   # ATRASADO
+                    Honorario.status_id == 1,
+                    Honorario.status_id == 3
                 )
             )
         ).scalar() or 0
@@ -102,13 +94,12 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
             and_(
                 Honorario.is_deleted == False,
                 or_(
-                    Honorario.status_id == 1,  # PENDENTE
-                    Honorario.status_id == 3   # ATRASADO
+                    Honorario.status_id == 1,
+                    Honorario.status_id == 3
                 )
             )
         ).scalar() or 0
 
-    # Total de honorários cadastrados
     honorarios_cadastrados = db.query(func.count(Honorario.id))\
         .filter(Honorario.is_deleted == False)\
         .scalar() or 0
@@ -127,7 +118,6 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
 def get_revenue_data(db: Session = Depends(get_db)):
     hoje = datetime.now()
     
-    # Buscar dados dos últimos 6 meses
     dados = []
     for i in range(5, -1, -1):
         data = hoje - timedelta(days=30*i)
@@ -151,14 +141,12 @@ def get_revenue_data(db: Session = Depends(get_db)):
 def get_client_data(db: Session = Depends(get_db)):
     hoje = datetime.now()
     
-    # Buscar dados dos últimos 6 meses
     dados = []
     for i in range(5, -1, -1):
         data = hoje - timedelta(days=30*i)
         primeiro_dia = data.replace(day=1)
         ultimo_dia = (primeiro_dia + timedelta(days=32)).replace(day=1) - timedelta(days=1)
         
-        # Clientes ativos no mês
         ativos = db.query(func.count(func.distinct(Cliente.id)))\
             .join(Honorario)\
             .filter(
@@ -170,7 +158,6 @@ def get_client_data(db: Session = Depends(get_db)):
                 )
             ).scalar() or 0
             
-        # Novos clientes no mês
         novos = db.query(func.count(Cliente.id))\
             .filter(
                 and_(

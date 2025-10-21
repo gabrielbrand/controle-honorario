@@ -6,7 +6,6 @@ class Status(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     nome = Column(String, nullable=False, unique=True)
-    descricao = Column(String)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs) 

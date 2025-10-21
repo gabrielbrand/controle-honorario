@@ -39,11 +39,13 @@ function ModalPagamento({ isOpen, onClose, pagamento, onSave }) {
       fetchHonorarios();
       fetchTiposPagamento();
       if (pagamento) {
+        // Corrigir problema de fuso horário na data
+        const dataPagamento = new Date(pagamento.data_pagamento + 'T00:00:00');
         setFormData({
           honorario_id: pagamento.honorario_id,
           valor: pagamento.valor.toString(),
           tipo_pagamento_id: pagamento.tipo_pagamento_id,
-          data_pagamento: new Date(pagamento.data_pagamento),
+          data_pagamento: dataPagamento,
           observacao: pagamento.observacao || ''
         });
       } else {

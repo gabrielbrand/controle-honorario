@@ -18,7 +18,6 @@ class Cliente(Base):
 
     def __init__(self, **kwargs):
         if 'data_criacao' in kwargs:
-            # Se data_criacao foi fornecido, garante que é apenas a data
             if isinstance(kwargs['data_criacao'], str):
                 kwargs['data_criacao'] = date.fromisoformat(kwargs['data_criacao'].split('T')[0])
             elif hasattr(kwargs['data_criacao'], 'date'):

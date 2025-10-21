@@ -7,6 +7,5 @@ class TipoPagamento(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     nome = Column(String, nullable=False, unique=True)
-    descricao = Column(String)
 
     pagamentos = relationship("Pagamento", back_populates="tipo_pagamento") 
