@@ -10,6 +10,15 @@ export default function RecentHonorarios({ honorarios }) {
     }).format(value);
   };
 
+  const filteredAndSortedHonorarios = honorarios?.filter(honorario => {
+    const status = honorario.status?.nome;
+    return status === 'PENDENTE' || status === 'ATRASADO';
+  }).sort((a, b) => {
+    const dateA = new Date(a.data_vencimento);
+    const dateB = new Date(b.data_vencimento);
+    return dateA - dateB;
+  }) || [];
+
   const getStatusColor = (status) => {
     if (!status) return 'bg-gray-100 text-gray-800';
     
@@ -51,7 +60,7 @@ export default function RecentHonorarios({ honorarios }) {
   return (
     <div className="bg-white rounded-lg shadow-md mt-6">
       <div className="p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Honorários Recentes</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">Honorários Pendentes de Pagamento</h3>
         <div className="overflow-x-auto">
           <table className="min-w-full">
             <thead>
@@ -64,7 +73,7 @@ export default function RecentHonorarios({ honorarios }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {honorarios?.map((honorario) => (
+              {filteredAndSortedHonorarios?.map((honorario) => (
                 <tr key={honorario.id} className="hover:bg-gray-50">
                   <td className="py-3 px-4">
                     <div className="flex items-center">

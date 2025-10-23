@@ -178,14 +178,26 @@ def get_client_data(db: Session = Depends(get_db)):
 @router.get("/dashboard/recent-honorarios", response_model=List[HonorarioSchema])
 def get_recent_honorarios(db: Session = Depends(get_db)):
     """
-    Retorna os 5 honorários mais recentes não deletados para exibição no dashboard.
+    Retorna os 5 honorários pendentes ou atrasados mais próximos de vencer para exibição no dashboard.
     """
-    return db.query(Honorario)\
+    hoje = datetime.now().date()
+    
+    honorarios = db.query(Honorario)\
         .options(
             joinedload(Honorario.cliente),
             joinedload(Honorario.status)
         )\
-        .filter(Honorario.is_deleted == False)\
-        .order_by(desc(Honorario.data_criacao))\
+        .filter(
+            and_(
+                Honorario.is_deleted == False,
+                or_(
+                    Honorario.status_id == 1,
+                    Honorario.status_id == 3
+                )
+            )
+        )\
+        .order_by(Honorario.data_vencimento)\
         .limit(5)\
-        .all() 
+        .all()
+    
+    return honorarios 

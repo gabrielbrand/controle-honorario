@@ -46,26 +46,24 @@ export default function Header() {
             </li>
             <li 
               className="cursor-pointer hover:bg-gray-100 p-2 rounded transition-colors text-normal text-black flex items-center gap-2 select-none"
+              onClick={() => router.push('/clientes')}
+            >
+              <UserPlus size={20} /> 
+              Clientes
+            </li>
+            <li 
+              className="cursor-pointer hover:bg-gray-100 p-2 rounded transition-colors text-normal text-black flex items-center gap-2 select-none"
               onClick={() => router.push('/honorarios')}
             >
               <DollarSign size={20} /> 
               Honorários
             </li>
-            
             <li 
               className="cursor-pointer hover:bg-gray-100 p-2 rounded transition-colors text-normal text-black flex items-center gap-2 select-none"
               onClick={() => router.push('/pagamentos')}
             >
               <CreditCard size={20} /> 
               Pagamentos
-            </li>
-            
-            <li 
-              className="cursor-pointer hover:bg-gray-100 p-2 rounded transition-colors text-normal text-black flex items-center gap-2 select-none"
-              onClick={() => router.push('/clientes')}
-            >
-              <UserPlus size={20} /> 
-              Clientes
             </li>
           </ul>
         </div>
