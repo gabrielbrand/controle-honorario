@@ -1,5 +1,7 @@
+import { apiFetch } from '@/utils/api';
+
 export async function buscarCliente(clienteId) {
-  const response = await fetch(`http://localhost:8000/clientes/${clienteId}`);
+  const response = await apiFetch(`/clientes/${clienteId}`);
   if (!response.ok) {
     console.error('Erro ao buscar cliente:', clienteId);
     return null;
@@ -9,7 +11,7 @@ export async function buscarCliente(clienteId) {
 
 
 export async function buscarStatus(statusId) {
-  const response = await fetch(`http://localhost:8000/status/${statusId}`);
+  const response = await apiFetch(`/status/${statusId}`);
   if (!response.ok) {
     console.error('Erro ao buscar status:', statusId);
     return null;
@@ -28,7 +30,7 @@ function ajustarData(dataString) {
 
 export async function buscarHonorarios() {
   try {
-    const response = await fetch('http://localhost:8000/honorarios/');
+    const response = await apiFetch('/honorarios/');
     if (!response.ok) {
       throw new Error('Erro ao buscar honorários');
     }

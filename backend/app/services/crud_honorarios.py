@@ -8,6 +8,7 @@ from fastapi import HTTPException
 
 def get_honorarios(
     db: Session,
+    usuario_id: int,
     skip: int = 0,
     limit: int = 100,
     cliente_id: int | None = None,
@@ -18,7 +19,12 @@ def get_honorarios(
     ).options(
         joinedload(Honorario.cliente),
         joinedload(Honorario.status)
-    ).filter(Honorario.is_deleted == False)
+    ).filter(
+        and_(
+            Honorario.usuario_id == usuario_id,
+            Honorario.is_deleted == False
+        )
+    )
     
     if cliente_id:
         query = query.filter(Honorario.cliente_id == cliente_id)
@@ -35,23 +41,27 @@ def get_honorarios(
     
     return honorarios
 
-def get_honorario(db: Session, honorario_id: int) -> Honorario:
+def get_honorario(db: Session, honorario_id: int, usuario_id: int) -> Honorario:
     honorario = db.query(Honorario).join(
         Honorario.cliente
     ).options(
         joinedload(Honorario.cliente),
         joinedload(Honorario.status)
     ).filter(
-        Honorario.id == honorario_id,
-        Honorario.is_deleted == False
+        and_(
+            Honorario.id == honorario_id,
+            Honorario.usuario_id == usuario_id,
+            Honorario.is_deleted == False
+        )
     ).first()
     
     if not honorario:
         raise HTTPException(status_code=404, detail="Honorário não encontrado")
     return honorario
 
-def create_honorario(db: Session, honorario: HonorarioCreate) -> Honorario:
+def create_honorario(db: Session, honorario: HonorarioCreate, usuario_id: int) -> Honorario:
     honorario_data = honorario.dict()
+    honorario_data['usuario_id'] = usuario_id
     
     if 'status_id' not in honorario_data or honorario_data['status_id'] is None:
         honorario_data['status_id'] = 1
@@ -74,9 +84,10 @@ def create_honorario(db: Session, honorario: HonorarioCreate) -> Honorario:
 def update_honorario(
     db: Session,
     honorario_id: int,
-    honorario_update: HonorarioUpdate
+    honorario_update: HonorarioUpdate,
+    usuario_id: int
 ) -> Honorario:
-    db_honorario = get_honorario(db, honorario_id)
+    db_honorario = get_honorario(db, honorario_id, usuario_id)
     
     update_data = honorario_update.dict(exclude_unset=True)
     
@@ -95,8 +106,8 @@ def update_honorario(
         db.rollback()
         raise HTTPException(status_code=400, detail=str(e))
 
-def delete_honorario(db: Session, honorario_id: int) -> bool:
-    db_honorario = get_honorario(db, honorario_id)
+def delete_honorario(db: Session, honorario_id: int, usuario_id: int) -> bool:
+    db_honorario = get_honorario(db, honorario_id, usuario_id)
     
     try:
         db_honorario.is_deleted = True
@@ -106,11 +117,14 @@ def delete_honorario(db: Session, honorario_id: int) -> bool:
         db.rollback()
         raise HTTPException(status_code=400, detail=str(e))
 
-def restore_honorario(db: Session, honorario_id: int) -> Honorario:
+def restore_honorario(db: Session, honorario_id: int, usuario_id: int) -> Honorario:
     """Restaura um honorário que foi marcado como deletado"""
     honorario = db.query(Honorario).filter(
-        Honorario.id == honorario_id,
-        Honorario.is_deleted == True
+        and_(
+            Honorario.id == honorario_id,
+            Honorario.usuario_id == usuario_id,
+            Honorario.is_deleted == True
+        )
     ).first()
     
     if not honorario:
@@ -125,7 +139,7 @@ def restore_honorario(db: Session, honorario_id: int) -> Honorario:
         db.rollback()
         raise HTTPException(status_code=400, detail=str(e))
 
-def check_overdue_honorarios(db: Session) -> None:
+def check_overdue_honorarios(db: Session, usuario_id: int) -> None:
     """Update status of overdue honorarios to ATRASADO"""
     from datetime import date
     
@@ -133,6 +147,7 @@ def check_overdue_honorarios(db: Session) -> None:
     
     overdue_honorarios = db.query(Honorario).filter(
         and_(
+            Honorario.usuario_id == usuario_id,
             Honorario.status_id == 1,
             Honorario.data_vencimento < hoje
         )

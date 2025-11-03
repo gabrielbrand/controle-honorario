@@ -39,7 +39,7 @@ export default function Header() {
           <ul className="flex flex-col gap-2 p-4">
             <li 
               className="cursor-pointer hover:bg-gray-100 p-2 rounded transition-colors text-normal text-black flex items-center gap-2 select-none"
-              onClick={() => router.push('/')}
+              onClick={() => router.push('/dashboard')}
             >
               <Home size={20} /> 
               Home
@@ -64,6 +64,16 @@ export default function Header() {
             >
               <CreditCard size={20} /> 
               Pagamentos
+            </li>
+            <li 
+              className="cursor-pointer hover:bg-gray-100 p-2 rounded transition-colors text-normal text-black flex items-center gap-2 select-none"
+              onClick={() => {
+                setIsMenuOpen(false);
+                router.push('/');
+              }}
+            >
+              <LogOut size={20} /> 
+              Sair
             </li>
           </ul>
         </div>

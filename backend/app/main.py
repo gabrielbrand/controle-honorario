@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
-from app.routers import clientes, honorarios, status, pagamentos, tipo_pagamento, dashboard
+from app.routers import clientes, honorarios, status, pagamentos, tipo_pagamento, dashboard, auth
 from app import models  # Isso importa os modelos e garante que as tabelas sejam criadas
 
 # Create database tables
@@ -24,6 +24,7 @@ app.include_router(status.router)
 app.include_router(pagamentos.router)
 app.include_router(tipo_pagamento.router)
 app.include_router(dashboard.router)
+app.include_router(auth.router)
 
 @app.get("/")
 def read_root():

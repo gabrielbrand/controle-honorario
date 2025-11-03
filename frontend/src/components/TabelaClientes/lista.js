@@ -1,6 +1,8 @@
+import { apiFetch } from '@/utils/api';
+
 export async function buscarClientes() {
   try {
-    const response = await fetch('http://localhost:8000/clientes/');
+    const response = await apiFetch('/clientes/');
 
     if (!response.ok) {
       const errorData = await response.json();

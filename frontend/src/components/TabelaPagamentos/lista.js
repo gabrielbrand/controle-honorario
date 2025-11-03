@@ -1,6 +1,8 @@
+import { apiFetch, apiGet, apiPost, apiPut, apiPatch } from '@/utils/api';
+
 export async function buscarPagamentos() {
   try {
-    const response = await fetch('http://localhost:8000/pagamentos/');
+    const response = await apiFetch('/pagamentos/');
     if (!response.ok) {
       throw new Error('Erro ao buscar pagamentos');
     }
@@ -14,9 +16,7 @@ export async function buscarPagamentos() {
 
 export async function buscarTiposPagamento() {
   try {
-    const response = await fetch('http://localhost:8000/tipos-pagamento/');
-    if (!response.ok) throw new Error('Erro ao buscar tipos de pagamento');
-    const data = await response.json();
+    const data = await apiGet('/tipos-pagamento/');
     return data;
   } catch (error) {
     console.error('Erro ao buscar tipos de pagamento:', error);
@@ -26,65 +26,43 @@ export async function buscarTiposPagamento() {
 
 export async function salvarPagamento(formData, selectedPagamento = null) {
   const url = selectedPagamento 
-    ? `http://localhost:8000/pagamentos/${selectedPagamento.id}`
-    : 'http://localhost:8000/pagamentos/';
-  
-  const method = selectedPagamento ? 'PUT' : 'POST';
+    ? `/pagamentos/${selectedPagamento.id}`
+    : '/pagamentos/';
 
-  const response = await fetch(url, {
-    method: method,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(formData),
-  });
+  try {
+    const result = selectedPagamento 
+      ? await apiPut(url, formData)
+      : await apiPost(url, formData);
 
-  const result = await response.json();
+    // Atualiza o status do honorário para PAGO
+    await atualizarStatusHonorario(formData.honorario_id);
 
-  if (!response.ok) {
-    if (result.detail) {
-      throw new Error(typeof result.detail === 'string' ? result.detail : JSON.stringify(result.detail));
-    }
-    throw new Error('Erro ao salvar pagamento');
+    return result;
+  } catch (error) {
+    const errorMessage = error.detail || error.message || 'Erro ao salvar pagamento';
+    throw new Error(typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage));
   }
-
-  // Atualiza o status do honorário para PAGO
-  await atualizarStatusHonorario(formData.honorario_id);
-
-  return result;
 }
 
 export async function atualizarStatusHonorario(honorarioId) {
-  const response = await fetch(`http://localhost:8000/honorarios/${honorarioId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  try {
+    const result = await apiPut(`/honorarios/${honorarioId}`, {
       status_id: 2 // ID do status PAGO
-    }),
-  });
-
-  if (!response.ok) {
+    });
+    return result;
+  } catch (error) {
     throw new Error('Erro ao atualizar status do honorário');
   }
-
-  return await response.json();
 }
 
 export async function excluirPagamento(pagamentoId) {
-  const response = await fetch(`http://localhost:8000/pagamentos/${pagamentoId}/soft-delete`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ is_deleted: true })
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || 'Erro ao excluir pagamento');
+  try {
+    const result = await apiPatch(`/pagamentos/${pagamentoId}/soft-delete`, { 
+      is_deleted: true 
+    });
+    return result;
+  } catch (error) {
+    const errorMessage = error.detail || 'Erro ao excluir pagamento';
+    throw new Error(errorMessage);
   }
-
-  return await response.json();
 }

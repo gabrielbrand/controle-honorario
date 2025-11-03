@@ -1,11 +1,14 @@
 'use client';
 
 import ListaHonorarios from '@/components/TabelaHonorarios';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 export default function HonorariosPage() {
   return (
-    <div>
-      <ListaHonorarios />
-    </div>
+    <ProtectedRoute>
+      <div>
+        <ListaHonorarios />
+      </div>
+    </ProtectedRoute>
   );
 }

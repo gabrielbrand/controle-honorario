@@ -8,6 +8,7 @@ class Cliente(Base):
     __tablename__ = "clientes"
 
     id = Column(Integer, primary_key=True, index=True)
+    usuario_id = Column(Integer, nullable=False, index=True)
     nome = Column(String, nullable=False)
     email = Column(String)
     telefone = Column(String)

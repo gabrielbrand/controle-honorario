@@ -175,7 +175,8 @@ function ListaClientes({ triggerReload }) {
     if (!clienteToDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/clientes/${clienteToDelete.id}`, {
+      const { apiFetch } = await import('@/utils/api');
+      const response = await apiFetch(`/clientes/${clienteToDelete.id}`, {
         method: 'DELETE',
       });
 
@@ -210,29 +211,19 @@ function ListaClientes({ triggerReload }) {
       }
 
       const url = selectedCliente 
-        ? `http://localhost:8000/clientes/${selectedCliente.id}`
-        : 'http://localhost:8000/clientes/';
+        ? `/clientes/${selectedCliente.id}`
+        : '/clientes/';
       
-      const method = selectedCliente ? 'PUT' : 'POST';
+      const { apiPost, apiPut } = await import('@/utils/api');
 
       // Previne múltiplas requisições simultâneas
       if (isModalOpen) {
         setIsModalOpen(false);
       }
 
-      const response = await fetch(url, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.detail || 'Erro ao salvar cliente');
-      }
+      const result = selectedCliente 
+        ? await apiPut(url, formData)
+        : await apiPost(url, formData);
 
       // Só atualiza a lista e mostra mensagem de sucesso se a requisição foi bem sucedida
       await fetchClientes();
@@ -240,7 +231,8 @@ function ListaClientes({ triggerReload }) {
       setSelectedCliente(null);
     } catch (error) {
       console.error('Erro ao salvar cliente:', error);
-      showToast('error', error.message || 'Erro ao salvar cliente. Verifique sua conexão e tente novamente.');
+      const errorMessage = error.detail || error.message || 'Erro ao salvar cliente. Verifique sua conexão e tente novamente.';
+      showToast('error', errorMessage);
       // Reabre o modal em caso de erro
       setIsModalOpen(true);
     }

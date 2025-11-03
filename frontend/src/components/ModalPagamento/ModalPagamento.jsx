@@ -63,9 +63,8 @@ function ModalPagamento({ isOpen, onClose, pagamento, onSave }) {
 
   const fetchHonorarios = async () => {
     try {
-      const response = await fetch('http://localhost:8000/honorarios/');
-      if (!response.ok) throw new Error('Erro ao buscar honorários');
-      const data = await response.json();
+      const { apiGet } = await import('@/utils/api');
+      const data = await apiGet('/honorarios/');
       console.log('Honorários recebidos:', data);
       setHonorarios(data);
     } catch (error) {
@@ -75,9 +74,8 @@ function ModalPagamento({ isOpen, onClose, pagamento, onSave }) {
 
   const fetchTiposPagamento = async () => {
     try {
-      const response = await fetch('http://localhost:8000/tipos-pagamento/');
-      if (!response.ok) throw new Error('Erro ao buscar tipos de pagamento');
-      const data = await response.json();
+      const { apiGet } = await import('@/utils/api');
+      const data = await apiGet('/tipos-pagamento/');
       setTiposPagamento(data);
     } catch (error) {
       console.error('Erro ao buscar tipos de pagamento:', error);

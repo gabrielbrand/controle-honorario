@@ -23,6 +23,7 @@ export default function Charts({ revenueData, clientData }) {
   };
 
   const translateMonth = (monthStr) => {
+    if (!monthStr) return '';
     const [month, year] = monthStr.split('/');
     const monthTranslations = {
       'Jan': 'Jan',
@@ -38,7 +39,7 @@ export default function Charts({ revenueData, clientData }) {
       'Nov': 'Nov',
       'Dec': 'Dez'
     };
-    return `${monthTranslations[month]}/${year}`;
+    return `${monthTranslations[month] || month}/${year}`;
   };
 
   // Traduzir os meses nos dados

@@ -71,11 +71,9 @@ function ListaHonorarios() {
   // Função para verificar e atualizar honorários atrasados
   const verificarHonorariosAtrasados = async () => {
     try {
-      const response = await fetch('http://localhost:8000/honorarios/check-overdue', {
+      const { apiFetch } = await import('@/utils/api');
+      const response = await apiFetch('/honorarios/check-overdue', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
       });
 
       if (response.ok) {
@@ -291,40 +289,35 @@ function ListaHonorarios() {
       }
 
       const url = selectedHonorario 
-        ? `http://localhost:8000/honorarios/${selectedHonorario.id}`
-        : 'http://localhost:8000/honorarios/';
+        ? `/honorarios/${selectedHonorario.id}`
+        : '/honorarios/';
       
-      const method = selectedHonorario ? 'PUT' : 'POST';
+      const { apiPost, apiPut } = await import('@/utils/api');
 
       console.log('Dados sendo enviados para a API:', {
         url,
-        method,
         data: honorarioData
       });
 
-      const response = await fetch(url, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(honorarioData),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
+      try {
+        const result = selectedHonorario 
+          ? await apiPut(url, honorarioData)
+          : await apiPost(url, honorarioData);
+        
         console.log('Honorário salvo com sucesso!', result);
         await fetchHonorarios();
         showToast('success', selectedHonorario ? 'Honorário atualizado com sucesso!' : 'Honorário cadastrado com sucesso!');
         setIsModalOpen(false);
-      } else {
-        const errorData = await response.json();
-        console.error('Erro detalhado da API:', errorData);
+      } catch (error) {
+        console.error('Erro detalhado da API:', error);
         let mensagemErro = 'Erro desconhecido';
         
-        if (errorData.detail && Array.isArray(errorData.detail)) {
-          mensagemErro = errorData.detail.map(err => err.msg || err.message || JSON.stringify(err)).join('\n');
-        } else if (errorData.detail) {
-          mensagemErro = errorData.detail;
+        if (error.detail && Array.isArray(error.detail)) {
+          mensagemErro = error.detail.map(err => err.msg || err.message || JSON.stringify(err)).join('\n');
+        } else if (error.detail) {
+          mensagemErro = error.detail;
+        } else if (error.message) {
+          mensagemErro = error.message;
         }
         
         showToast('error', `Erro ao salvar honorário: ${mensagemErro}`);
@@ -349,25 +342,17 @@ function ListaHonorarios() {
     if (!honorarioToDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/honorarios/${honorarioToDelete.id}/soft-delete`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ is_deleted: true })
+      const { apiPatch } = await import('@/utils/api');
+      const result = await apiPatch(`/honorarios/${honorarioToDelete.id}/soft-delete`, { 
+        is_deleted: true 
       });
 
-      if (response.ok) {
-        await fetchHonorarios(); // Recarrega a lista para refletir as mudanças
-        showToast('success', 'Honorário excluído com sucesso!');
-      } else {
-        const errorData = await response.json();
-        console.error('Erro ao excluir honorário:', errorData);
-        showToast('error', 'Erro ao excluir honorário. Tente novamente.');
-      }
+      await fetchHonorarios(); // Recarrega a lista para refletir as mudanças
+      showToast('success', 'Honorário excluído com sucesso!');
     } catch (error) {
       console.error('Erro ao excluir honorário:', error);
-      showToast('error', 'Erro ao excluir honorário. Tente novamente.');
+      const errorMessage = error.detail || 'Erro ao excluir honorário. Tente novamente.';
+      showToast('error', errorMessage);
     } finally {
       setIsDeleteModalOpen(false);
       setHonorarioToDelete(null);
@@ -381,25 +366,17 @@ function ListaHonorarios() {
 
   const handleRestore = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8000/honorarios/${id}/restore`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ is_deleted: false })
+      const { apiPost } = await import('@/utils/api');
+      await apiPost(`/honorarios/${id}/restore`, { 
+        is_deleted: false 
       });
 
-      if (response.ok) {
-        await fetchHonorarios(); // Recarrega a lista para refletir as mudanças
-        showToast('success', 'Honorário restaurado com sucesso!');
-      } else {
-        const errorData = await response.json();
-        console.error('Erro ao restaurar honorário:', errorData);
-        showToast('error', 'Erro ao restaurar honorário. Tente novamente.');
-      }
+      await fetchHonorarios(); // Recarrega a lista para refletir as mudanças
+      showToast('success', 'Honorário restaurado com sucesso!');
     } catch (error) {
       console.error('Erro ao restaurar honorário:', error);
-      showToast('error', 'Erro ao restaurar honorário. Tente novamente.');
+      const errorMessage = error.detail || 'Erro ao restaurar honorário. Tente novamente.';
+      showToast('error', errorMessage);
     }
   };
 

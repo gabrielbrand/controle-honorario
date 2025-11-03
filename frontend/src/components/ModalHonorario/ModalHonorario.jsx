@@ -116,13 +116,9 @@ export default function ModalHonorario({ isOpen, onClose, honorario = null, onSa
   const fetchClientes = async () => {
     try {
       setIsLoadingClientes(true);
-      const response = await fetch('http://localhost:8000/clientes/');
-      if (response.ok) {
-        const data = await response.json();
-        setClientes(data);
-      } else {
-        console.error('Erro ao buscar clientes');
-      }
+      const { apiGet } = await import('@/utils/api');
+      const data = await apiGet('/clientes/');
+      setClientes(data);
     } catch (error) {
       console.error('Erro ao buscar clientes:', error);
     } finally {

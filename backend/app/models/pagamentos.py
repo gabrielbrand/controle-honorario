@@ -7,6 +7,7 @@ class Pagamento(Base):
     __tablename__ = "pagamentos"
 
     id = Column(Integer, primary_key=True, index=True)
+    usuario_id = Column(Integer, nullable=False, index=True)
     honorario_id = Column(Integer, ForeignKey("honorarios.id"), nullable=False)
     valor = Column(Float, nullable=False)
     data_pagamento = Column(Date, default=date.today)

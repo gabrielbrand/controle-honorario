@@ -10,6 +10,7 @@ class Honorario(Base):
     __tablename__ = "honorarios"
 
     id = Column(Integer, primary_key=True, index=True)
+    usuario_id = Column(Integer, nullable=False, index=True)
     cliente_id = Column(Integer, ForeignKey("clientes.id"))
     valor = Column(Float, nullable=False)
     status_id = Column(Integer, ForeignKey("status.id"))

@@ -4,11 +4,13 @@ from .honorarios import Honorario
 from .status import Status
 from .pagamentos import Pagamento
 from .tipo_pagamento import TipoPagamento
+from .usuario import Usuario
 
 __all__ = [
     'Cliente',
     'Honorario',
     'Status',
     'Pagamento',
-    'TipoPagamento'
+    'TipoPagamento',
+    'Usuario'
 ]
