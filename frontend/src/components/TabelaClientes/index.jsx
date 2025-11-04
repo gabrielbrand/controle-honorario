@@ -503,7 +503,7 @@ function ListaClientes({ triggerReload }) {
               Confirmar Exclusão
             </h3>
             <p className="text-gray-600 text-center mb-6 font-inter">
-              Tem certeza que deseja excluir este cliente? O cliente será mantido no banco de dados, mas não aparecerá mais na lista.
+              Tem certeza que deseja excluir este cliente? Os honorários e pagamentos associados a este cliente também serão excluídos.
             </p>
             <div className="flex justify-center space-x-4">
               <button
