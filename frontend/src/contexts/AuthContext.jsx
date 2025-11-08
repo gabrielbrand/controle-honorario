@@ -19,7 +19,6 @@ export const AuthProvider = ({ children }) => {
     const router = useRouter();
 
     useEffect(() => {
-        // Verifica se há usuário salvo no localStorage ao carregar
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             try {
@@ -48,7 +47,6 @@ export const AuthProvider = ({ children }) => {
                 throw new Error(data.detail || 'Erro ao fazer login');
             }
 
-            // Salva dados do usuário no localStorage
             const userData = {
                 id: data.id,
                 nome: data.nome,
