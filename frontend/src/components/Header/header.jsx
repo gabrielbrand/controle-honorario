@@ -38,12 +38,12 @@ export default function Header() {
             {
               hours < 12 ? (
                 <>
-                  <Sun className="text-blue-800" size={24} />
+                  <Sun className="text-yellow-500" size={24} />
                   <span>Bom dia, {user.nome}!</span>
                 </>
               ) : hours >= 12 && hours <= 17 ? (
                 <>
-                  <CloudSun className="text-blue-800" size={24} />
+                  <CloudSun className="text-yellow-600" size={24} />
                   <span>Boa tarde, {user.nome}!</span>
                 </>
               ) : (
