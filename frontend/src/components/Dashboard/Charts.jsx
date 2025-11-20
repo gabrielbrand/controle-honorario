@@ -42,7 +42,6 @@ export default function Charts({ revenueData, clientData }) {
     return `${monthTranslations[month] || month}/${year}`;
   };
 
-  // Traduzir os meses nos dados
   const translatedRevenueData = revenueData?.map(item => ({
     ...item,
     month: translateMonth(item.month)
@@ -81,7 +80,6 @@ export default function Charts({ revenueData, clientData }) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-      {/* Gráfico de Receita */}
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Receita Mensal</h3>
         <div className="h-80">
@@ -121,7 +119,6 @@ export default function Charts({ revenueData, clientData }) {
         </div>
       </div>
 
-      {/* Gráfico de Clientes */}
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Evolução de Clientes</h3>
         <div className="h-80">

@@ -4,7 +4,6 @@ import DatePicker, { registerLocale } from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { ptBR } from 'date-fns/locale';
 
-// Registrar a localização em português
 registerLocale('pt-BR', ptBR);
 
 export default function ModalHonorario({ isOpen, onClose, honorario = null, onSave }) {
@@ -19,21 +18,15 @@ export default function ModalHonorario({ isOpen, onClose, honorario = null, onSa
   const [clientes, setClientes] = useState([]);
   const [isLoadingClientes, setIsLoadingClientes] = useState(false);
 
-  // Função para formatar valor como moeda brasileira
   const formatarMoeda = (valor) => {
-    // Remove tudo que não é dígito
     const apenasNumeros = valor.replace(/\D/g, '');
     
-    // Se não há números, retorna string vazia
     if (!apenasNumeros) return '';
     
-    // Converte para número e divide por 100 para ter centavos
     const numero = parseFloat(apenasNumeros) / 100;
     
-    // Se o número é 0, retorna string vazia
     if (numero === 0) return '';
     
-    // Formata como moeda brasileira
     return numero.toLocaleString('pt-BR', {
       style: 'currency',
       currency: 'BRL',
@@ -42,11 +35,9 @@ export default function ModalHonorario({ isOpen, onClose, honorario = null, onSa
     });
   };
 
-  // Função para converter moeda formatada de volta para número
   const converterMoedaParaNumero = (valorFormatado) => {
     if (!valorFormatado) return 0;
     
-    // Remove R$, espaços e pontos, substitui vírgula por ponto
     const numeroString = valorFormatado
       .replace(/R\$\s?/g, '')
       .replace(/\./g, '')
@@ -59,23 +50,19 @@ export default function ModalHonorario({ isOpen, onClose, honorario = null, onSa
   const handleValorChange = (e) => {
     const valorDigitado = e.target.value;
     
-    // Se o usuário está apagando tudo, permite campo vazio
     if (valorDigitado === '') {
       setFormData({ ...formData, valor: '' });
       return;
     }
     
-    // Aplica formatação apenas se há dígitos
     const valorFormatado = formatarMoeda(valorDigitado);
     setFormData({ ...formData, valor: valorFormatado });
   };
 
-  // Buscar clientes quando o modal abrir
   useEffect(() => {
     if (isOpen) {
       fetchClientes();
       
-      // Se não há honorário selecionado (novo honorário), limpa os campos
         if (!honorario) {
         setFormData({
           cliente_id: '',
@@ -92,7 +79,6 @@ export default function ModalHonorario({ isOpen, onClose, honorario = null, onSa
     if (honorario) {
       console.log('Carregando honorário para edição:', honorario);
       
-      // Converter o mês de referência de YYYY-MM para Date
       let mesReferenciaDate = null;
       if (honorario.mes_referencia) {
         const [ano, mes] = honorario.mes_referencia.split('-');
@@ -130,14 +116,12 @@ export default function ModalHonorario({ isOpen, onClose, honorario = null, onSa
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Preparar dados para envio
     let mesReferencia = null;
     if (formData.mes_referencia && formData.mes_referencia instanceof Date && !isNaN(formData.mes_referencia)) {
       const ano = formData.mes_referencia.getFullYear();
       const mes = String(formData.mes_referencia.getMonth() + 1).padStart(2, '0');
       mesReferencia = `${ano}-${mes}`;
     } else {
-      // Se não houver mês de referência, usar o mês atual
       const hoje = new Date();
       const ano = hoje.getFullYear();
       const mes = String(hoje.getMonth() + 1).padStart(2, '0');

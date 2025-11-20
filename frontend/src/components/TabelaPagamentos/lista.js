@@ -34,7 +34,6 @@ export async function salvarPagamento(formData, selectedPagamento = null) {
       ? await apiPut(url, formData)
       : await apiPost(url, formData);
 
-    // Atualiza o status do honorário para PAGO
     await atualizarStatusHonorario(formData.honorario_id);
 
     return result;
@@ -47,7 +46,7 @@ export async function salvarPagamento(formData, selectedPagamento = null) {
 export async function atualizarStatusHonorario(honorarioId) {
   try {
     const result = await apiPut(`/honorarios/${honorarioId}`, {
-      status_id: 2 // ID do status PAGO
+      status_id: 2
     });
     return result;
   } catch (error) {

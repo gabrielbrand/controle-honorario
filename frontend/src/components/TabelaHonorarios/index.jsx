@@ -11,7 +11,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ptBR } from 'date-fns/locale';
 import toast, { Toaster } from 'react-hot-toast';
 
-// Registrar a localização em português
 registerLocale('pt-BR', ptBR);
 
 function ListaHonorarios() {
@@ -24,7 +23,6 @@ function ListaHonorarios() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [honorarioToDelete, setHonorarioToDelete] = useState(null);
   
-  // Filtros
   const [busca, setBusca] = useState('');
   const [statusSelecionado, setStatusSelecionado] = useState('');
   const [dataInicio, setDataInicio] = useState(null);
@@ -39,7 +37,6 @@ function ListaHonorarios() {
     try {
       const date = new Date(data);
       
-      // Verificar se a data é válida
       if (isNaN(date.getTime())) {
         console.error('Data inválida:', data);
         return 'Data inválida';
@@ -68,7 +65,6 @@ function ListaHonorarios() {
     return Math.ceil((vencimento - hoje) / (1000 * 60 * 60 * 24));
   };
 
-  // Função para verificar e atualizar honorários atrasados
   const verificarHonorariosAtrasados = async () => {
     try {
       const { apiFetch } = await import('@/utils/api');
@@ -78,7 +74,6 @@ function ListaHonorarios() {
 
       if (response.ok) {
         console.log('Status de honorários atrasados atualizado com sucesso');
-        // Recarrega a lista para mostrar as mudanças
         await fetchHonorarios();
       } else {
         console.error('Erro ao verificar honorários atrasados');
@@ -88,7 +83,6 @@ function ListaHonorarios() {
     }
   };
 
-  // Função para verificar status localmente (para feedback visual imediato)
   const verificarStatusLocal = (honorario) => {
     if (!honorario.dataVencimento || honorario.status?.nome === 'PAGO') {
       return honorario.status;
@@ -99,7 +93,6 @@ function ListaHonorarios() {
     const vencimento = new Date(honorario.dataVencimento);
     vencimento.setHours(0, 0, 0, 0);
 
-    // Se passou da data de vencimento e não está pago, deve estar atrasado
     if (vencimento < hoje && honorario.status?.nome === 'PENDENTE') {
       return {
         nome: 'ATRASADO',
@@ -113,7 +106,6 @@ function ListaHonorarios() {
   useEffect(() => {
     fetchHonorarios();
     
-    // Verificar honorários atrasados ao carregar a página
     verificarHonorariosAtrasados();
   }, []);
 
@@ -124,34 +116,28 @@ function ListaHonorarios() {
   const filtrarHonorarios = () => {
     let resultados = [...honorarios];
 
-    // Filtro por nome do cliente
     if (busca) {
       resultados = resultados.filter(honorario => 
         honorario.cliente?.nome?.toLowerCase().includes(busca.toLowerCase())
       );
     }
 
-    // Filtro por status
     if (statusSelecionado) {
       resultados = resultados.filter(honorario => 
         honorario.status?.nome === statusSelecionado
       );
     }
 
-    // Filtro por mês de referência
     if (mesReferencia) {
       resultados = resultados.filter(honorario => {
         if (!honorario.mes_referencia) return false;
         
-        // Formatar o mês selecionado para YYYY-MM
         const mesSelecionado = `${mesReferencia.getFullYear()}-${String(mesReferencia.getMonth() + 1).padStart(2, '0')}`;
         
-        // Comparar diretamente com o mes_referencia do honorário
         return honorario.mes_referencia === mesSelecionado;
       });
     }
 
-    // Filtro por data
     if (dataInicio) {
       const inicio = new Date(dataInicio);
       inicio.setHours(0, 0, 0, 0);
@@ -171,22 +157,18 @@ function ListaHonorarios() {
     setHonorariosFiltrados(resultados);
   };
 
-  // Função para calcular o total de páginas
   const totalPages = Math.ceil(honorariosFiltrados.length / itemsPerPage);
 
-  // Função para obter os honorários da página atual
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return honorariosFiltrados.slice(startIndex, endIndex);
   };
 
-  // Função para mudar de página
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // Toast helper function
   const showToast = (type, message) => {
     const baseStyle = {
       background: '#FFFFFF',
@@ -269,7 +251,6 @@ function ListaHonorarios() {
         return;
       }
 
-      // Preparar dados para envio
       const honorarioData = {
         cliente_id: parseInt(formData.cliente_id),
         valor: parseFloat(formData.valor),
@@ -278,14 +259,11 @@ function ListaHonorarios() {
         descricao: formData.descricao || ''
       };
 
-      // Adicionar campos específicos para criação ou edição
       if (selectedHonorario) {
-        // Para edição, incluir status_id se foi alterado
         const statusMap = { 'PENDENTE': 1, 'PAGO': 2, 'ATRASADO': 3 };
         honorarioData.status_id = statusMap[formData.status] || 1;
       } else {
-        // Para criação, usar status padrão
-        honorarioData.status_id = 1;   // PENDENTE
+        honorarioData.status_id = 1;
       }
 
       const url = selectedHonorario 
@@ -347,7 +325,7 @@ function ListaHonorarios() {
         is_deleted: true 
       });
 
-      await fetchHonorarios(); // Recarrega a lista para refletir as mudanças
+      await fetchHonorarios();
       showToast('success', 'Honorário excluído com sucesso!');
     } catch (error) {
       console.error('Erro ao excluir honorário:', error);
@@ -371,7 +349,7 @@ function ListaHonorarios() {
         is_deleted: false 
       });
 
-      await fetchHonorarios(); // Recarrega a lista para refletir as mudanças
+      await fetchHonorarios();
       showToast('success', 'Honorário restaurado com sucesso!');
     } catch (error) {
       console.error('Erro ao restaurar honorário:', error);
@@ -438,12 +416,10 @@ function ListaHonorarios() {
           transition: all 0.3s ease-in-out !important;
         }
 
-        /* Ajuste da posição do botão de limpar do DatePicker */
         .react-datepicker__close-icon {
           right: 8px !important;
         }
 
-        /* Estilo do botão de limpar do campo de busca */
         .search-clear-button {
           width: 24px !important;
           height: 24px !important;
@@ -494,10 +470,8 @@ function ListaHonorarios() {
           </button>
         </div>
 
-        {/* Filtros */}
         <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
           <div className="grid grid-cols-5 gap-6">
-            {/* Busca por Cliente */}
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">
                 Buscar Cliente
@@ -522,7 +496,6 @@ function ListaHonorarios() {
               </div>
             </div>
 
-            {/* Status */}
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">
                 Status do Honorário
@@ -542,7 +515,6 @@ function ListaHonorarios() {
               </div>
             </div>
 
-            {/* Mês de Referência */}
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">
                 Mês de Referência
@@ -563,7 +535,6 @@ function ListaHonorarios() {
               </div>
             </div>
 
-            {/* Data Inicial */}
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">
                 Data Inicial do Vencimento
@@ -583,7 +554,6 @@ function ListaHonorarios() {
               </div>
             </div>
 
-            {/* Data Final */}
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">
                 Data Final do Vencimento
@@ -606,7 +576,6 @@ function ListaHonorarios() {
         </div>
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
-          {/* Header */}
           <div className="bg-[#F1F3F6] px-6 py-4">
             <div className="grid grid-cols-6 gap-4">
               <div className="text-sm font-semibold text-[#0B174C] tracking-wider text-center">Cliente</div>
@@ -618,7 +587,6 @@ function ListaHonorarios() {
             </div>
           </div>
 
-          {/* Tabela */}
           <div className="divide-y divide-gray-200">
             {getCurrentPageItems().length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 bg-gray-50">
@@ -641,7 +609,6 @@ function ListaHonorarios() {
                 const statusAtual = verificarStatusLocal(honorario);
                 const diasAteVencimento = calcularDiasAteVencimento(honorario.dataVencimento);
                 
-                // Formatar o mês de referência para MM/AAAA
                 const formatarMesReferencia = (mesRef) => {
                   if (!mesRef) return '-';
                   try {
@@ -730,7 +697,6 @@ function ListaHonorarios() {
           </div>
         </div>
 
-        {/* Paginação */}
         <div className="mt-6 flex items-center justify-between bg-white px-6 py-4 rounded-lg shadow">
           <div className="text-sm text-gray-700 font-inter">
             Mostrando <span className="font-medium">{((currentPage - 1) * itemsPerPage) + 1}</span> a{' '}
@@ -779,7 +745,6 @@ function ListaHonorarios() {
         </div>
       </div>
 
-      {/* Modal de Confirmação de Exclusão */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md relative">

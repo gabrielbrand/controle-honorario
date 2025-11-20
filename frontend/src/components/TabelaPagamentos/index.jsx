@@ -11,7 +11,6 @@ import DatePicker, { registerLocale } from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { ptBR } from 'date-fns/locale';
 
-// Registrar a localização em português
 registerLocale('pt-BR', ptBR);
 
 function ListaPagamentos() {
@@ -26,7 +25,6 @@ function ListaPagamentos() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7;
   
-  // Filtros
   const [nomeCliente, setNomeCliente] = useState('');
   const [mesReferencia, setMesReferencia] = useState(null);
   const [tipoPagamento, setTipoPagamento] = useState('');
@@ -34,7 +32,6 @@ function ListaPagamentos() {
   const [dataFim, setDataFim] = useState(null);
   const [tiposPagamento, setTiposPagamento] = useState([]);
 
-  // Toast helper function
   const showToast = (type, message) => {
     const baseStyle = {
       background: '#FFFFFF',
@@ -109,7 +106,6 @@ function ListaPagamentos() {
     if (!data) return '';
     
     try {
-      // Adiciona T00:00:00 para garantir que a data seja interpretada no fuso horário local
       const date = new Date(data + 'T00:00:00');
       
       if (isNaN(date.getTime())) {
@@ -162,34 +158,28 @@ function ListaPagamentos() {
   const filtrarPagamentos = () => {
     let resultados = [...pagamentos];
 
-    // Filtro por nome do cliente
     if (nomeCliente) {
       resultados = resultados.filter(pagamento => 
         pagamento.honorario?.cliente?.nome?.toLowerCase().includes(nomeCliente.toLowerCase())
       );
     }
 
-    // Filtro por mês de referência
     if (mesReferencia) {
       resultados = resultados.filter(pagamento => {
         if (!pagamento.honorario?.mes_referencia) return false;
         
-        // Formatar o mês selecionado para YYYY-MM
         const mesSelecionado = `${mesReferencia.getFullYear()}-${String(mesReferencia.getMonth() + 1).padStart(2, '0')}`;
         
-        // Comparar diretamente com o mes_referencia do honorário
         return pagamento.honorario.mes_referencia === mesSelecionado;
       });
     }
 
-    // Filtro por tipo de pagamento
     if (tipoPagamento) {
       resultados = resultados.filter(pagamento => 
         pagamento.tipo_pagamento_id === parseInt(tipoPagamento)
       );
     }
 
-    // Filtro por data
     if (dataInicio) {
       const inicio = new Date(dataInicio);
       inicio.setHours(0, 0, 0, 0);
@@ -209,17 +199,14 @@ function ListaPagamentos() {
     setPagamentosFiltrados(resultados);
   };
 
-  // Função para calcular o total de páginas
   const totalPages = Math.ceil(pagamentosFiltrados.length / itemsPerPage);
 
-  // Função para obter os pagamentos da página atual
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return pagamentosFiltrados.slice(startIndex, endIndex);
   };
 
-  // Função para mudar de página
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -257,7 +244,6 @@ function ListaPagamentos() {
 
   const handleSavePagamento = async (formData) => {
     try {
-      // Previne múltiplas requisições simultâneas
       if (isModalOpen) {
         setIsModalOpen(false);
       }
@@ -322,10 +308,8 @@ function ListaPagamentos() {
           </button>
         </div>
 
-        {/* Filtros */}
         <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
           <div className="grid grid-cols-5 gap-6">
-            {/* Nome do Cliente */}
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">
                 Buscar Cliente
@@ -350,7 +334,6 @@ function ListaPagamentos() {
               </div>
             </div>
 
-            {/* Tipo de Pagamento */}
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">
                 Tipo de Pagamento
@@ -369,7 +352,6 @@ function ListaPagamentos() {
               </select>
             </div>
 
-            {/* Mês de Referência */}
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">
                 Mês de Referência
@@ -390,7 +372,6 @@ function ListaPagamentos() {
               </div>
             </div>
 
-            {/* Data Inicial */}
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">
                 Data Inicial do Pagamento
@@ -410,7 +391,6 @@ function ListaPagamentos() {
               </div>
             </div>
 
-            {/* Data Final */}
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">
                 Data Final do Pagamento
@@ -433,7 +413,6 @@ function ListaPagamentos() {
         </div>
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
-          {/* Header */}
           <div className="bg-[#F1F3F6] px-6 py-4">
             <div className="grid grid-cols-5 gap-4">
               <div className="text-sm font-semibold text-[#0B174C] tracking-wider">Cliente/Referência</div>
@@ -444,7 +423,6 @@ function ListaPagamentos() {
             </div>
           </div>
 
-          {/* Tabela */}
           <div className="divide-y divide-gray-200">
             {getCurrentPageItems().length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 bg-gray-50">
@@ -477,7 +455,6 @@ function ListaPagamentos() {
                       index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
                     } hover:bg-gray-100 transition-colors items-center`}
                   >
-                    {/* Cliente e Referência */}
                     <div className="flex flex-col justify-center">
                       <span className="text-sm font-regular text-gray-900 truncate">
                         {pagamento.honorario?.cliente?.nome || 'Cliente não encontrado'}
@@ -487,28 +464,24 @@ function ListaPagamentos() {
                       </span>
                     </div>
 
-                    {/* Valor */}
                     <div className="flex justify-center items-center">
                       <span className="text-sm font-regular text-gray-900">
                         {formatarValor(pagamento.valor)}
                       </span>
                     </div>
 
-                    {/* Tipo de Pagamento */}
                     <div className="flex justify-center items-center">
                       <span className="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800">
                         {pagamento.tipo_pagamento?.nome || 'Tipo não encontrado'}
                       </span>
                     </div>
 
-                    {/* Data */}
                     <div className="flex justify-center items-center">
                       <span className="text-sm font-regular text-gray-900">
                         {formatarData(pagamento.data_pagamento)}
                       </span>
                     </div>
 
-                    {/* Ações */}
                     <div className="flex items-center justify-center gap-2">
                       <button 
                         onClick={() => handleEdit(pagamento)}
@@ -542,7 +515,6 @@ function ListaPagamentos() {
           </div>
         </div>
 
-        {/* Paginação */}
         <div className="mt-6 flex items-center justify-between bg-white px-6 py-4 rounded-lg shadow">
           <div className="text-sm text-gray-700 font-inter">
             Mostrando <span className="font-medium">{((currentPage - 1) * itemsPerPage) + 1}</span> a{' '}
@@ -591,7 +563,6 @@ function ListaPagamentos() {
         </div>
       </div>
 
-      {/* Modal de Confirmação de Exclusão */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md relative">

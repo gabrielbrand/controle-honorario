@@ -4,7 +4,6 @@ import DatePicker, { registerLocale } from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { ptBR } from 'date-fns/locale';
 
-// Registrar a localização em português
 registerLocale('pt-BR', ptBR);
 
 function ModalPagamento({ isOpen, onClose, pagamento, onSave }) {
@@ -19,7 +18,6 @@ function ModalPagamento({ isOpen, onClose, pagamento, onSave }) {
   const [tiposPagamento, setTiposPagamento] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Função para formatar valor em moeda brasileira
   const formatarMoeda = (valor) => {
     if (!valor) return '';
     return new Intl.NumberFormat('pt-BR', {
@@ -28,7 +26,6 @@ function ModalPagamento({ isOpen, onClose, pagamento, onSave }) {
     }).format(valor);
   };
 
-  // Função para limpar a formatação da moeda
   const limparFormatacaoMoeda = (valor) => {
     if (!valor) return '';
     return valor.replace(/\D/g, '');
@@ -39,7 +36,6 @@ function ModalPagamento({ isOpen, onClose, pagamento, onSave }) {
       fetchHonorarios();
       fetchTiposPagamento();
       if (pagamento) {
-        // Corrigir problema de fuso horário na data
         const dataPagamento = new Date(pagamento.data_pagamento + 'T00:00:00');
         setFormData({
           honorario_id: pagamento.honorario_id,
@@ -90,11 +86,9 @@ function ModalPagamento({ isOpen, onClose, pagamento, onSave }) {
     try {
       setIsSubmitting(true);
       
-      // Formatar a data para YYYY-MM-DD
       const data = formData.data_pagamento;
       const dataFormatada = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}-${String(data.getDate()).padStart(2, '0')}`;
 
-      // Converter valor para número e formatar dados
       const dadosParaEnviar = {
         ...formData,
         valor: parseFloat(formData.valor),

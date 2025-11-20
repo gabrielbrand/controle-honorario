@@ -7,8 +7,6 @@ import Stats from '@/components/Dashboard/Stats';
 import Charts from '@/components/Dashboard/Charts';
 import RecentHonorarios from '@/components/Dashboard/RecentHonorarios';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { format, subMonths } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 
 function App() {
   const [stats, setStats] = useState({});
@@ -25,24 +23,19 @@ function App() {
     try {
       setIsLoading(true);
       
-      // Importa o helper de API
       const { apiGet } = await import('@/utils/api');
       
-      // Buscar estatísticas gerais
       const statsData = await apiGet('/dashboard/stats');
       setStats(statsData);
 
-      // Buscar dados de receita dos últimos 6 meses
       const revenueData = await apiGet('/dashboard/revenue');
       setRevenueData(revenueData);
 
-      // Buscar dados de clientes
       const clientData = await apiGet('/dashboard/clients');
       setClientData(clientData);
 
-      // Buscar honorários recentes
       const honorariosData = await apiGet('/honorarios/');
-      setRecentHonorarios(honorariosData.slice(0, 5)); // Mostrar apenas os 5 mais recentes
+      setRecentHonorarios(honorariosData.slice(0, 5));
 
     } catch (error) {
       console.error('Erro ao carregar dados do dashboard:', error);
@@ -89,13 +82,10 @@ function App() {
             </div>
           </div>
 
-          {/* Estatísticas */}
           <Stats stats={stats} />
 
-          {/* Gráficos */}
           <Charts revenueData={revenueData} clientData={clientData} />
 
-          {/* Honorários Recentes */}
           <RecentHonorarios honorarios={recentHonorarios} />
         </div>
       </div>

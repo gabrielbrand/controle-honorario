@@ -42,7 +42,8 @@ const Cadastro = () => {
         try {
             setIsLoading(true);
             
-            const response = await fetch('http://localhost:8000/auth/cadastro', {
+            const API_URL = process.env.NEXT_PUBLIC_API_URL;
+            const response = await fetch(`${API_URL}/auth/cadastro`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,13 +58,11 @@ const Cadastro = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                // Se for erro da API, mostrar a mensagem
                 const errorMessage = data.detail || 'Erro ao criar conta. Tente novamente.';
                 setError(errorMessage);
                 return;
             }
 
-            // Sucesso - redirecionar para login
             alert('Conta criada com sucesso! Você será redirecionado para a página de login.');
             router.push('/');
             
@@ -78,9 +77,7 @@ const Cadastro = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-50 px-4">
             <div className="w-full max-w-md">
-                {/* Card de Cadastro */}
                 <div className="bg-white rounded-2xl shadow-xl p-8 md:p-10">
-                    {/* Logo/Header */}
                     <div className="text-center mb-8">
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-4">
                             <UserPlus className="text-white" size={32} />
@@ -93,16 +90,13 @@ const Cadastro = () => {
                         </p>
                     </div>
 
-                    {/* Mensagem de erro */}
                     {error && (
                         <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
                             {error}
                         </div>
                     )}
 
-                    {/* Formulário */}
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Campo Nome */}
                         <div>
                             <label htmlFor="nome" className="block text-sm font-medium text-gray-700 mb-2">
                                 Nome Completo
@@ -120,7 +114,6 @@ const Cadastro = () => {
                             </div>
                         </div>
 
-                        {/* Campo Email */}
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                                 Email
@@ -138,7 +131,6 @@ const Cadastro = () => {
                             </div>
                         </div>
 
-                        {/* Campo Senha */}
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                                 Senha
@@ -158,7 +150,6 @@ const Cadastro = () => {
                             </div>
                         </div>
 
-                        {/* Campo Confirmar Senha */}
                         <div>
                             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
                                 Confirmar Senha
@@ -178,7 +169,6 @@ const Cadastro = () => {
                             </div>
                         </div>
 
-                        {/* Botão de Cadastro */}
                         <button
                             type="submit"
                             disabled={isLoading}
@@ -195,7 +185,6 @@ const Cadastro = () => {
                         </button>
                     </form>
 
-                    {/* Link para Login */}
                     <div className="mt-6 text-center">
                         <p className="text-sm text-gray-600">
                             Já tem uma conta?{' '}

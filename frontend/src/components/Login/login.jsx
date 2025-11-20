@@ -22,7 +22,6 @@ const Login = () => {
         const result = await login(email, password);
 
         if (result.success) {
-            // Redireciona para dashboard após login bem-sucedido
             router.push('/dashboard');
         } else {
             setError(result.error || 'Erro ao fazer login. Verifique suas credenciais.');
@@ -33,9 +32,7 @@ const Login = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-50 px-4">
             <div className="w-full max-w-md">
-                {/* Card de Login */}
                 <div className="bg-white rounded-2xl shadow-xl p-8 md:p-10">
-                    {/* Logo/Header */}
                     <div className="text-center mb-8">
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-4">
                             <FileChartColumn className="text-white" size={32} />
@@ -48,16 +45,13 @@ const Login = () => {
                         </p>
                     </div>
 
-                    {/* Mensagem de erro */}
                     {error && (
                         <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
                             {error}
                         </div>
                     )}
 
-                    {/* Formulário */}
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Campo Email */}
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                                 Email
@@ -75,7 +69,6 @@ const Login = () => {
                             </div>
                         </div>
 
-                        {/* Campo Senha */}
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                                 Senha
@@ -93,7 +86,6 @@ const Login = () => {
                             </div>
                         </div>
 
-                        {/* Botão de Login */}
                         <button
                             type="submit"
                             disabled={isLoading}
@@ -110,7 +102,6 @@ const Login = () => {
                         </button>
                     </form>
 
-                    {/* Link para Cadastro */}
                     <div className="mt-6 text-center">
                         <p className="text-sm text-gray-600">
                             Não tem uma conta?{' '}

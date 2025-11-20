@@ -43,7 +43,6 @@ export default function RecentHonorarios({ honorarios }) {
     try {
       if (!dateString) return 'Data inválida';
       
-      // Se a data vier como string no formato ISO (YYYY-MM-DD)
       const [year, month, day] = dateString.split('-');
       const date = new Date(year, month - 1, day);
       

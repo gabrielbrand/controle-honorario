@@ -23,41 +23,34 @@ function ModalCliente({ isOpen, onClose, cliente, onSave }) {
         email: cliente.email || '',
         telefone: cliente.telefone || '',
       });
-      setErrors({ email: '' }); // Reset errors when editing
+      setErrors({ email: '' });
     } else {
       setFormData({
         nome: '',
         email: '',
         telefone: '',
       });
-      setErrors({ email: '' }); // Reset errors for new client
+      setErrors({ email: '' });
     }
     setIsSubmitting(false);
   }, [cliente]);
 
-  // Função para validar email
   const validarEmail = (email) => {
-    if (!email) return true; // Email é opcional
+    if (!email) return true;
     return email.includes('@');
   };
 
-  // Função para formatar o telefone no padrão brasileiro
   const formatarTelefone = (valor) => {
-    // Remove tudo que não é número
     const apenasNumeros = valor.replace(/\D/g, '');
     
-    // Se não há números, retorna string vazia
     if (!apenasNumeros) return '';
     
-    // Formata o número de acordo com a quantidade de dígitos
     if (apenasNumeros.length <= 10) {
-      // Formato: (XX) XXXX-XXXX
       return apenasNumeros
         .replace(/(\d{2})/, '($1) ')
         .replace(/(\d{4})/, '$1-')
         .replace(/(\d{4})\d+?$/, '$1');
     } else {
-      // Formato: (XX) XXXXX-XXXX
       return apenasNumeros
         .replace(/(\d{2})/, '($1) ')
         .replace(/(\d{5})/, '$1-')
@@ -76,7 +69,6 @@ function ModalCliente({ isOpen, onClose, cliente, onSave }) {
     
     if (isSubmitting) return;
     
-    // Validar email antes de enviar
     if (formData.email && !validarEmail(formData.email)) {
       setErrors({ ...errors, email: 'Email inválido. Deve conter @' });
       return;
@@ -85,7 +77,6 @@ function ModalCliente({ isOpen, onClose, cliente, onSave }) {
     try {
       setIsSubmitting(true);
       
-      // Remove a formatação do telefone antes de enviar
       const dadosParaEnviar = {
         ...formData,
         telefone: formData.telefone.replace(/\D/g, '')

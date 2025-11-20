@@ -20,27 +20,20 @@ function ListaClientes({ triggerReload }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7;
   
-  // Filtros
   const [busca, setBusca] = useState('');
 
-  // Função para formatar o telefone no padrão brasileiro
   const formatarTelefone = (valor) => {
     if (!valor) return '';
-    // Remove tudo que não é número
     const apenasNumeros = valor.replace(/\D/g, '');
     
-    // Se não há números, retorna string vazia
     if (!apenasNumeros) return '';
     
-    // Formata o número de acordo com a quantidade de dígitos
     if (apenasNumeros.length <= 10) {
-      // Formato: (XX) XXXX-XXXX
       return apenasNumeros
         .replace(/(\d{2})/, '($1) ')
         .replace(/(\d{4})/, '$1-')
         .replace(/(\d{4})\d+?$/, '$1');
     } else {
-      // Formato: (XX) XXXXX-XXXX
       return apenasNumeros
         .replace(/(\d{2})/, '($1) ')
         .replace(/(\d{5})/, '$1-')
@@ -48,7 +41,6 @@ function ListaClientes({ triggerReload }) {
     }
   };
 
-  // Toast helper function
   const showToast = (type, message) => {
     const baseStyle = {
       background: '#FFFFFF',
@@ -136,7 +128,6 @@ function ListaClientes({ triggerReload }) {
   const filtrarClientes = () => {
     let resultados = [...clientes];
 
-    // Filtro por nome do cliente
     if (busca) {
       resultados = resultados.filter(cliente => 
         cliente.nome?.toLowerCase().includes(busca.toLowerCase())
@@ -146,17 +137,14 @@ function ListaClientes({ triggerReload }) {
     setClientesFiltrados(resultados);
   };
 
-  // Função para calcular o total de páginas
   const totalPages = Math.ceil(clientesFiltrados.length / itemsPerPage);
 
-  // Função para obter os clientes da página atual
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return clientesFiltrados.slice(startIndex, endIndex);
   };
 
-  // Função para mudar de página
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -181,7 +169,6 @@ function ListaClientes({ triggerReload }) {
       });
 
       if (response.ok) {
-        // Atualizar a lista de clientes após a exclusão lógica
         await fetchClientes();
         showToast('success', 'Cliente excluido com sucesso!');
       } else {
@@ -216,7 +203,6 @@ function ListaClientes({ triggerReload }) {
       
       const { apiPost, apiPut } = await import('@/utils/api');
 
-      // Previne múltiplas requisições simultâneas
       if (isModalOpen) {
         setIsModalOpen(false);
       }
@@ -225,7 +211,6 @@ function ListaClientes({ triggerReload }) {
         ? await apiPut(url, formData)
         : await apiPost(url, formData);
 
-      // Só atualiza a lista e mostra mensagem de sucesso se a requisição foi bem sucedida
       await fetchClientes();
       showToast('success', selectedCliente ? 'Cliente atualizado com sucesso!' : 'Cliente cadastrado com sucesso!');
       setSelectedCliente(null);
@@ -233,7 +218,6 @@ function ListaClientes({ triggerReload }) {
       console.error('Erro ao salvar cliente:', error);
       const errorMessage = error.detail || error.message || 'Erro ao salvar cliente. Verifique sua conexão e tente novamente.';
       showToast('error', errorMessage);
-      // Reabre o modal em caso de erro
       setIsModalOpen(true);
     }
   };
@@ -286,7 +270,6 @@ function ListaClientes({ triggerReload }) {
           transition: all 0.3s ease-in-out !important;
         }
 
-        /* Estilo do botão de limpar do campo de busca */
         .search-clear-button {
           width: 24px !important;
           height: 24px !important;
@@ -337,10 +320,8 @@ function ListaClientes({ triggerReload }) {
           </button>
         </div>
 
-        {/* Filtros */}
         <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
           <div className="grid grid-cols-1 gap-6">
-            {/* Busca por Cliente */}
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">
                 Buscar Cliente
@@ -368,7 +349,6 @@ function ListaClientes({ triggerReload }) {
         </div>
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
-          {/* Header */}
           <div className="bg-[#F1F3F6] px-6 py-4">
             <div className="grid grid-cols-4 gap-4">
               <div className="text-sm font-semibold text-[#0B174C] tracking-wider">Nome</div>
@@ -378,7 +358,6 @@ function ListaClientes({ triggerReload }) {
             </div>
           </div>
 
-          {/* Tabela */}
           <div className="divide-y divide-gray-200">
             {getCurrentPageItems().length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 bg-gray-50">
@@ -443,7 +422,6 @@ function ListaClientes({ triggerReload }) {
           </div>
         </div>
 
-        {/* Paginação */}
         <div className="mt-6 flex items-center justify-between bg-white px-6 py-4 rounded-lg shadow">
           <div className="text-sm text-gray-700 font-inter">
             Mostrando <span className="font-medium">{((currentPage - 1) * itemsPerPage) + 1}</span> a{' '}
@@ -492,7 +470,6 @@ function ListaClientes({ triggerReload }) {
         </div>
       </div>
 
-      {/* Modal de Confirmação de Exclusão */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md relative">
