@@ -9,8 +9,6 @@ from fastapi import HTTPException
 def get_honorarios(
     db: Session,
     usuario_id: int,
-    skip: int = 0,
-    limit: int = 100,
     cliente_id: int | None = None,
     status_id: int | None = None
 ) -> List[Honorario]:
@@ -31,7 +29,7 @@ def get_honorarios(
     if status_id:
         query = query.filter(Honorario.status_id == status_id)
         
-    honorarios = query.offset(skip).limit(limit).all()
+    honorarios = query.all()
     
     for honorario in honorarios:
         if honorario.mes_referencia is None:

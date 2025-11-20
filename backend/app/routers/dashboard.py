@@ -1,15 +1,14 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 from app.database import get_db
 from app.dependencies import get_usuario_id
 from app.models import Honorario, Cliente, Pagamento
-from sqlalchemy import func, extract, and_, desc, or_
+from sqlalchemy import func, extract, and_, or_
 from datetime import datetime, timedelta, date
 from typing import List
 from pydantic import BaseModel
-from app.schemas.honorarios import Honorario as HonorarioSchema
 
-router = APIRouter()
+router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
 class DashboardStats(BaseModel):
     totalRecebido: float
@@ -29,7 +28,7 @@ class ClientData(BaseModel):
     active: int
     new: int
 
-@router.get("/dashboard/stats", response_model=DashboardStats)
+@router.get("/stats", response_model=DashboardStats)
 def get_dashboard_stats(
     db: Session = Depends(get_db),
     usuario_id: int = Depends(get_usuario_id)
@@ -129,7 +128,7 @@ def get_dashboard_stats(
         honorariosCadastrados=honorarios_cadastrados
     )
 
-@router.get("/dashboard/revenue", response_model=List[RevenueData])
+@router.get("/revenue", response_model=List[RevenueData])
 def get_revenue_data(
     db: Session = Depends(get_db),
     usuario_id: int = Depends(get_usuario_id)
@@ -177,7 +176,7 @@ def get_revenue_data(
     
     return dados
 
-@router.get("/dashboard/clients", response_model=List[ClientData])
+@router.get("/clients", response_model=List[ClientData])
 def get_client_data(
     db: Session = Depends(get_db),
     usuario_id: int = Depends(get_usuario_id)
@@ -240,35 +239,4 @@ def get_client_data(
             new=novos
         ))
     
-    return dados
-
-@router.get("/dashboard/recent-honorarios", response_model=List[HonorarioSchema])
-def get_recent_honorarios(
-    db: Session = Depends(get_db),
-    usuario_id: int = Depends(get_usuario_id)
-):
-    """
-    Retorna os 5 honorários pendentes ou atrasados mais próximos de vencer para exibição no dashboard.
-    """
-    hoje = datetime.now().date()
-    
-    honorarios = db.query(Honorario)\
-        .options(
-            joinedload(Honorario.cliente),
-            joinedload(Honorario.status)
-        )\
-        .filter(
-            and_(
-                Honorario.usuario_id == usuario_id,
-                Honorario.is_deleted == False,
-                or_(
-                    Honorario.status_id == 1,
-                    Honorario.status_id == 3
-                )
-            )
-        )\
-        .order_by(Honorario.data_vencimento)\
-        .limit(5)\
-        .all()
-    
-    return honorarios 
+    return dados 

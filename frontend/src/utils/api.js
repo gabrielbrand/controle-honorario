@@ -13,9 +13,9 @@ export const apiFetch = async (url, options = {}) => {
         ...options.headers,
     };
     
-    // Adiciona X-User-Id se usuário estiver logado
+    // Adiciona user-id se usuário estiver logado
     if (user && user.id) {
-        headers['X-User-Id'] = user.id.toString();
+        headers['user-id'] = user.id.toString();
     }
     
     // Faz a requisição

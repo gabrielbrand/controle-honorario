@@ -1,9 +1,9 @@
 from fastapi import Header, HTTPException
 from typing import Optional
 
-def get_usuario_id(x_user_id: Optional[int] = Header(None, alias="X-User-Id")) -> int:
+def get_usuario_id(user_id: Optional[int] = Header(None, alias="user-id")) -> int:
     """Obtém o ID do usuário do header da requisição"""
-    if x_user_id is None:
+    if user_id is None:
         raise HTTPException(status_code=401, detail="Usuário não autenticado")
-    return x_user_id
+    return user_id
 

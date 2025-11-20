@@ -8,8 +8,6 @@ from fastapi import HTTPException
 def get_pagamentos(
     db: Session,
     usuario_id: int,
-    skip: int = 0,
-    limit: int = 100,
     honorario_id: int | None = None
 ):
     query = db.query(Pagamento).join(
@@ -27,7 +25,7 @@ def get_pagamentos(
     if honorario_id:
         query = query.filter(Pagamento.honorario_id == honorario_id)
         
-    return query.offset(skip).limit(limit).all()
+    return query.all()
 
 def get_pagamento(db: Session, pagamento_id: int, usuario_id: int):
     pagamento = db.query(Pagamento).join(

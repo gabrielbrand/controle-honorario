@@ -72,7 +72,7 @@ function ListaHonorarios() {
   const verificarHonorariosAtrasados = async () => {
     try {
       const { apiFetch } = await import('@/utils/api');
-      const response = await apiFetch('/honorarios/check-overdue', {
+      const response = await apiFetch('/honorarios/verificar-atrasados', {
         method: 'POST',
       });
 
@@ -626,7 +626,7 @@ function ListaHonorarios() {
                   <div className="text-gray-500 font-inter text-base text-center">
                     <div className="mb-2">Você ainda não possui honorários cadastrados</div>
                     <div>
-                      Clique em <span className="text-blue-600 font-semibold">"Novo Honorário"</span> para começar!
+                      Clique em Novo Honorário para começar!
                     </div>
                   </div>
                 ) : (

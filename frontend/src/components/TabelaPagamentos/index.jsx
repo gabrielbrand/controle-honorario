@@ -452,7 +452,7 @@ function ListaPagamentos() {
                   <div className="text-gray-500 font-inter text-base text-center">
                     <div className="mb-2">Você ainda não possui pagamentos cadastrados</div>
                     <div>
-                      Clique em <span className="text-[#021edf] font-semibold">"Novo Pagamento"</span> para começar!
+                      Clique em Novo Pagamento para começar!
                     </div>
                   </div>
                 ) : (

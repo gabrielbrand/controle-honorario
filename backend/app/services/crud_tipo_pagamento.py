@@ -3,8 +3,8 @@ from app.models.tipo_pagamento import TipoPagamento
 from app.schemas.tipo_pagamento import TipoPagamentoCreate
 from fastapi import HTTPException
 
-def get_tipos_pagamento(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(TipoPagamento).offset(skip).limit(limit).all()
+def get_tipos_pagamento(db: Session):
+    return db.query(TipoPagamento).all()
 
 def get_tipo_pagamento_by_id(db: Session, tipo_id: int):
     tipo = db.query(TipoPagamento).filter(TipoPagamento.id == tipo_id).first()

@@ -7,10 +7,10 @@ from datetime import date
 from sqlalchemy import func, and_
 from fastapi import HTTPException
 
-def get_clientes(db: Session, usuario_id: int, skip: int = 0, limit: int = 100):
+def get_clientes(db: Session, usuario_id: int):
     return db.query(Cliente).filter(
         and_(Cliente.usuario_id == usuario_id, Cliente.is_deleted == False)
-    ).offset(skip).limit(limit).all()
+    ).all()
 
 def get_cliente_by_id(db: Session, cliente_id: int, usuario_id: int):
     return db.query(Cliente).filter(

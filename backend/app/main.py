@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
-from app.routers import clientes, honorarios, status, pagamentos, tipo_pagamento, dashboard, auth
+from app.routers import clientes, honorarios, pagamentos, tipo_pagamento, dashboard, auth
 from app import models  # Isso importa os modelos e garante que as tabelas sejam criadas
 
 # Create database tables
@@ -20,7 +20,6 @@ app.add_middleware(
 
 app.include_router(clientes.router)
 app.include_router(honorarios.router)
-app.include_router(status.router)
 app.include_router(pagamentos.router)
 app.include_router(tipo_pagamento.router)
 app.include_router(dashboard.router)
